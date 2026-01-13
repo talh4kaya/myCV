@@ -1,136 +1,158 @@
 import React from 'react';
-import { Github, Linkedin, Mail, ArrowUpRight, ChevronDown } from 'lucide-react';
+import TerminalChat from './components/TerminalChat';
+import { Code2, Brain, Database, GraduationCap, Globe, Cpu } from 'lucide-react';
 
 function App() {
   return (
-    <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
+    <div className="min-h-screen bg-black text-white font-sans selection:bg-zinc-800 selection:text-white overflow-x-hidden">
       
-      {/* 1. NAVBAR (Logo & Contact) */}
-      <nav className="fixed top-0 left-0 w-full p-8 flex justify-between items-center z-50 mix-blend-difference">
-        {/* Logo */}
-        <div className="text-2xl font-bold tracking-tighter border-2 border-white p-1 leading-none">
-          TK
-        </div>
-        
-        {/* Sağ Üst Link */}
-        <a href="mailto:talhakaya@gmail.com" className="text-sm font-medium hover:underline decoration-white underline-offset-4">
-          contact
-        </a>
+      {/* 1. NAVBAR */}
+      <nav className="fixed top-0 left-0 w-full p-8 z-50 mix-blend-difference">
+        <img 
+          src="/tk-logo.png" 
+          alt="TK Logo" 
+          className="w-14 h-14 object-contain opacity-80 hover:opacity-100 transition-opacity cursor-pointer grayscale hover:grayscale-0" 
+        />
       </nav>
 
-      {/* 2. HERO SECTION (Referans Görseldeki Gibi) */}
-      <section className="h-screen flex flex-col justify-center px-6 md:px-24 relative">
-        <div className="max-w-4xl space-y-8">
+      {/* 2. HERO SECTION */}
+      <section className="min-h-screen flex flex-col lg:flex-row items-center px-6 md:px-24 pt-24 lg:pt-0 relative">
+        
+        {/* SOL TARAFI: Yazılar ve LİNKLER */}
+        <div className="lg:w-1/2 w-full space-y-10 z-10 mb-16 lg:mb-0 pl-0 lg:pl-10">
           
-          {/* Elmas İkonu (Görseldeki detay) */}
-          <div className="mb-12">
-            <div className="w-8 h-8 bg-white rotate-45"></div>
-          </div>
+          <div className="w-4 h-4 bg-white rotate-45 mb-8 hidden md:block opacity-60"></div>
 
-          <h1 className="text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9]">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-[1.1]">
             Hi, my name is Talha,<br />
-            I’m a <span className="text-gray-400">Data Scientist</span>,<br />
-            <span className="text-gray-400">ML Engineer</span> and<br />
-            tech enthusiast.
+            I’m a <span className="text-zinc-500">Data Scientist</span>,<br />
+            <span className="text-zinc-500">ML Engineer</span> and<br />
+            analytical problem solver.
           </h1>
 
-          {/* Link Listesi */}
-          <div className="flex flex-col gap-2 text-lg md:text-xl mt-12 pl-1">
-            <a href="mailto:talhakaya@gmail.com" className="hover:text-gray-400 transition-colors w-max underline decoration-zinc-700 underline-offset-4">
-              talhakaya@gmail.com
+          {/* LİNK LİSTESİ */}
+          <div className="flex flex-col gap-3 text-lg md:text-xl pl-1 font-medium text-zinc-600">
+            
+            <a 
+              href="mailto:talh4kaya@gmail.com" 
+              className="hover:text-white transition-colors w-max text-zinc-400 underline decoration-zinc-800 underline-offset-4"
+            >
+              talh4kaya@gmail.com
             </a>
-            <a href="#" className="hover:text-gray-400 transition-colors w-max">github</a>
-            <a href="#" className="hover:text-gray-400 transition-colors w-max">linkedin</a>
-            <a href="#" className="hover:text-gray-400 transition-colors w-max">cv (download)</a>
+
+            <a 
+              href="https://github.com/talh4kaya" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors w-max hover:translate-x-2 duration-200"
+            >
+              github
+            </a>
+
+            <a 
+              href="https://www.linkedin.com/in/talha-kaya-aa5255340" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors w-max hover:translate-x-2 duration-200"
+            >
+              linkedin
+            </a>
+
+            <a 
+              href="#" 
+              className="hover:text-white transition-colors w-max hover:translate-x-2 duration-200 opacity-60 cursor-help"
+              title="Yakında eklenecek"
+            >
+              cv (yakında)
+            </a>
           </div>
         </div>
 
-        {/* Scroll İkonu */}
-        <div className="absolute bottom-10 right-10 md:right-24 animate-bounce">
-          <ChevronDown size={32} />
+        {/* SAĞ TARAFI: Terminal Chatbot */}
+        <div className="lg:w-1/2 w-full z-20 flex justify-center lg:justify-start lg:pl-16 pr-0">
+          <TerminalChat />
         </div>
+
+        {/* HERO ARKA PLAN IŞIĞI */}
+        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] bg-green-900/20 rounded-full blur-[180px] -z-10 pointer-events-none opacity-30"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[150px] -z-10 pointer-events-none opacity-30"></div>
+
       </section>
 
-      {/* 3. ABOUT SECTION */}
-      <section className="py-32 px-6 md:px-24 bg-black border-t border-zinc-900">
-        <div className="max-w-3xl">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-8">01 — Hakkımda</h2>
-          <p className="text-2xl md:text-4xl leading-relaxed font-light text-zinc-300">
-            Veri ve yapay zeka arasındaki karmaşık problemleri çözmeye odaklanmış bir mühendisim. 
-            Klasik yazılım geliştirmeyi, modern Makine Öğrenmesi teknikleriyle birleştirerek 
-            <span className="text-white font-medium"> gerçek dünyada çalışan</span> akıllı sistemler inşa ediyorum.
-          </p>
-        </div>
-      </section>
-
-      {/* 4. PROJECTS SECTION */}
-      <section className="py-32 px-6 md:px-24 bg-zinc-950">
-        <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-16">02 — Seçili Projeler</h2>
+      {/* 3. ABOUT ME SECTION */}
+      <section className="py-32 px-6 md:px-24 bg-black border-t border-zinc-900 relative">
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           
-          {/* PROJE 1 */}
-          <div className="group cursor-pointer">
-            <div className="h-[400px] bg-zinc-900 border border-zinc-800 p-8 flex flex-col justify-between hover:border-zinc-600 transition-all duration-300">
-              <div className="flex justify-between items-start">
-                <span className="text-zinc-500 text-sm">001</span>
-                <ArrowUpRight className="text-zinc-600 group-hover:text-white transition-colors" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold mb-2">RL Game Agent</h3>
-                <p className="text-zinc-400 text-sm">Reinforcement Learning ile eğitilmiş, kendi kendine öğrenen otonom oyun ajanı.</p>
-                <div className="flex gap-2 mt-4">
-                  <span className="text-xs border border-zinc-700 px-2 py-1 rounded text-zinc-400">Python</span>
-                  <span className="text-xs border border-zinc-700 px-2 py-1 rounded text-zinc-400">PyTorch</span>
-                </div>
-              </div>
+          {/* SOL: Biyografi Metni */}
+          <div className="space-y-8">
+            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-zinc-500 mb-8 flex items-center gap-2">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+              01. Hakkımda
+            </h2>
+            
+            <h3 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+              Veriyi anlama, işleme ve <span className="text-zinc-500">geleceği kodlama</span> tutkusu.
+            </h3>
+
+            <div className="space-y-6 text-zinc-400 leading-relaxed text-lg">
+              <p>
+                Merhaba, ben <strong className="text-white">Talha Kaya</strong>. Sakarya Üniversitesi Bilgisayar Mühendisliği 3. sınıf öğrencisiyim. 
+                Teknoloji dünyasında sadece kod yazan biri değil, karmaşık problemleri analitik zekasıyla çözen bir mühendis adayıyım.
+              </p>
+              <p>
+                Yazılım serüvenim <strong className="text-white">Python ve C++</strong> ile başladı, ancak asıl tutkum verilerin arkasındaki hikayeyi keşfetmek oldu. 
+                <strong className="text-white"> Arvasis Yazılım</strong>'da Makine Öğrenmesi stajyeri olarak 65 farklı dilde OCR (Optik Karakter Tanıma) modelleri geliştirerek teorik bilgimi gerçek dünya projelerine dönüştürdüm.
+              </p>
+              <p>
+                İyi bir iletişimin teknik bilgi kadar önemli olduğuna inanırım. İngilizce (B2) bilgim ve meraklı yapımla, Reinforcement Learning'den Computer Vision'a kadar yapay zekanın sınırlarını zorlamayı seviyorum.
+              </p>
             </div>
           </div>
 
-          {/* PROJE 2 */}
-          <div className="group cursor-pointer">
-            <div className="h-[400px] bg-zinc-900 border border-zinc-800 p-8 flex flex-col justify-between hover:border-zinc-600 transition-all duration-300">
-              <div className="flex justify-between items-start">
-                <span className="text-zinc-500 text-sm">002</span>
-                <ArrowUpRight className="text-zinc-600 group-hover:text-white transition-colors" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold mb-2">Vision AI</h3>
-                <p className="text-zinc-400 text-sm">Görüntü işleme ve nesne tanıma üzerine kurulu, gerçek zamanlı analiz sistemi.</p>
-                <div className="flex gap-2 mt-4">
-                  <span className="text-xs border border-zinc-700 px-2 py-1 rounded text-zinc-400">OpenCV</span>
-                  <span className="text-xs border border-zinc-700 px-2 py-1 rounded text-zinc-400">YOLOv8</span>
-                </div>
+          {/* SAĞ: Teknik Kartlar (Grid Yapısı) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 lg:mt-0">
+            
+            {/* Kart 1: Eğitim (Sarı -> Beyaz) */}
+            <div className="p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800 hover:border-zinc-600 transition-colors group">
+              <GraduationCap className="text-yellow-500 group-hover:text-white mb-4 transition-colors duration-300" size={32} />
+              <h4 className="text-xl font-bold text-white mb-2">Eğitim</h4>
+              <p className="text-zinc-400 text-sm">Sakarya Üniversitesi</p>
+              <p className="text-zinc-500 text-sm">Bilgisayar Müh. (3. Sınıf)</p>
+            </div>
+
+            {/* Kart 2: Alanlar (Yeşil -> Beyaz) */}
+            <div className="p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800 hover:border-zinc-600 transition-colors group">
+              <Brain className="text-green-500 group-hover:text-white mb-4 transition-colors duration-300" size={32} />
+              <h4 className="text-xl font-bold text-white mb-2">Odak Alanları</h4>
+              <p className="text-zinc-400 text-sm">Machine Learning</p>
+              <p className="text-zinc-500 text-sm">Deep Learning, RL, NLP</p>
+            </div>
+
+            {/* Kart 3: Diller & Araçlar (Mavi -> Beyaz) */}
+            <div className="p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800 hover:border-zinc-600 transition-colors group">
+              <Code2 className="text-blue-500 group-hover:text-white mb-4 transition-colors duration-300" size={32} />
+              <h4 className="text-xl font-bold text-white mb-2">Stack</h4>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {['Python', 'C++', 'SQL', 'Pandas', 'NumPy', 'Scikit-learn', 'OpenCV'].map((tech) => (
+                  <span key={tech} className="text-xs bg-black border border-zinc-800 px-2 py-1 rounded text-zinc-400">
+                    {tech}
+                  </span>
+                ))}
               </div>
             </div>
-          </div>
 
-          {/* PROJE 3 */}
-          <div className="group cursor-pointer">
-            <div className="h-[400px] bg-zinc-900 border border-zinc-800 p-8 flex flex-col justify-between hover:border-zinc-600 transition-all duration-300">
-              <div className="flex justify-between items-start">
-                <span className="text-zinc-500 text-sm">003</span>
-                <ArrowUpRight className="text-zinc-600 group-hover:text-white transition-colors" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold mb-2">Smart Portfolio</h3>
-                <p className="text-zinc-400 text-sm">React ve Gemini AI kullanılarak geliştirilmiş, yaşayan kişisel web sitesi.</p>
-                <div className="flex gap-2 mt-4">
-                  <span className="text-xs border border-zinc-700 px-2 py-1 rounded text-zinc-400">React</span>
-                  <span className="text-xs border border-zinc-700 px-2 py-1 rounded text-zinc-400">Tailwind</span>
-                </div>
-              </div>
+            {/* Kart 4: Yabancı Dil (Mor -> Beyaz) */}
+            <div className="p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800 hover:border-zinc-600 transition-colors group">
+              <Globe className="text-purple-500 group-hover:text-white mb-4 transition-colors duration-300" size={32} />
+              <h4 className="text-xl font-bold text-white mb-2">Dil Yetkinliği</h4>
+              <p className="text-zinc-400 text-sm">İngilizce (B2)</p>
+              <p className="text-zinc-500 text-sm">Hazırlık Eğitimi + Teknik Literatür</p>
             </div>
-          </div>
 
+          </div>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer className="py-12 px-6 md:px-24 border-t border-zinc-900 flex justify-between items-center text-zinc-500 text-sm">
-        <p>© 2024 Talha Kaya</p>
-        <p>Designed with Code</p>
-      </footer>
 
     </div>
   );
