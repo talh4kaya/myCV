@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Send, Terminal } from 'lucide-react';
 import { getGeminiResponse } from '../services/gemini'; // Servisi çağırdık
 import { savePromptToFirebase } from '../services/firebase'; // Servisi çağırdık
@@ -84,10 +84,10 @@ export default function TerminalChat() {
       </div>
 
       {/* TERMINAL */}
-      <div className="font-mono text-sm shadow-2xl shadow-black rounded-t-3xl rounded-b-xl overflow-hidden border border-zinc-800 bg-black relative z-10">
+      <div className="font-mono text-sm shadow-2xl shadow-black rounded-xl overflow-hidden border border-zinc-800 bg-black relative z-10">
 
         {/* HEADER */}
-        <div className="bg-zinc-900 px-5 py-3 flex items-center justify-between border-b border-zinc-800">
+        <div className="bg-[#0f0f11] px-4 py-2.5 flex items-center justify-between border-b border-zinc-800">
           <div className="flex items-center gap-4">
             <div className="flex gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500 shadow-sm"></div>
@@ -133,7 +133,7 @@ export default function TerminalChat() {
           </div>
 
           {/* FOOTER (INPUT AREA) - Modified as requested */}
-          <div className="bg-zinc-900 px-5 py-4 border-t border-zinc-800 z-20">
+          <div className="bg-[#0f0f11] px-4 py-3 border-t border-zinc-800 z-20">
             <div className="flex gap-3 items-center">
               <span className="text-green-500 text-lg animate-pulse font-bold">❯</span>
               <input

@@ -1,9 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { portfolioData } from "../data/portfolio";
 
-// NOT: Güvenlik için API Anahtarını .env dosyasından almalıyız.
-// Ama şimdilik test için buraya yapıştırabilirsin veya .env kullanabilirsin.
-const API_KEY = "REMOVED_API_KEY";
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 

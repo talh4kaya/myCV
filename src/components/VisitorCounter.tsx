@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { motion, useSpring, useTransform } from 'framer-motion';
 
 const VisitorCounter = () => {
-    const [count, setCount] = useState<number>(0);
     const spring = useSpring(0, { bounce: 0, duration: 2000 });
     const displayValue = useTransform(spring, (current) => Math.round(current));
 
@@ -15,14 +14,12 @@ const VisitorCounter = () => {
         fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`)
             .then(res => res.json())
             .then(data => {
-                setCount(data.value);
                 spring.set(data.value);
             })
             .catch(err => {
                 console.warn("Counter API error:", err);
                 // Fallback demo for localhost if API fails
                 const fakeCount = 359;
-                setCount(fakeCount);
                 spring.set(fakeCount);
             });
     }, [spring]);
