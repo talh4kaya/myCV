@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import TerminalChat from '../components/TerminalChat';
 import ProjectCarousel from '../components/ProjectCarousel';
 import VisitorCounter from '../components/VisitorCounter';
-import { Code2, Brain, GraduationCap, Globe } from 'lucide-react';
+import { Code2, Brain, GraduationCap, Globe, Github } from 'lucide-react';
 
 function Home() {
     // Initial empty state for the text segments
     const [typedSegments, setTypedSegments] = useState([
         { text: "", className: "text-white" },
         { text: "", className: "text-white" },
-        { text: "", className: "text-zinc-500" },
+        { text: "", className: "text-red-600" },
         { text: "", className: "text-white" },
-        { text: "", className: "text-zinc-500" },
+        { text: "", className: "text-red-600" },
         { text: "", className: "text-white" },
         { text: "", className: "text-white" }
     ]);
@@ -30,9 +30,9 @@ function Home() {
         const fullSegments = [
             { text: "Hi, my name is Talha,\n", className: "text-white" },
             { text: "I’m a ", className: "text-white" },
-            { text: "Data Scientist", className: "text-zinc-500" },
+            { text: "Data Scientist", className: "text-red-600" },
             { text: ",\n", className: "text-white" },
-            { text: "ML Engineer", className: "text-zinc-500" },
+            { text: "ML Engineer", className: "text-red-600" },
             { text: " and\n", className: "text-white" },
             { text: "analytical problem solver.", className: "text-white" }
         ];
@@ -130,7 +130,7 @@ function Home() {
                 className="fixed top-0 left-0 w-full p-4 md:p-8 z-50 mix-blend-difference flex justify-between items-center"
             >
                 <img
-                    src="/tk-logo.png"
+                    src="/me.png"
                     alt="TK Logo"
                     className="w-14 h-14 object-contain opacity-80 hover:opacity-100 transition-opacity cursor-pointer grayscale hover:grayscale-0"
                 />
@@ -186,7 +186,9 @@ function Home() {
                         </a>
 
                         <a
-                            href="#"
+                            href="/Cv.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="hover:text-white transition-colors w-max hover:translate-x-2 duration-200 opacity-60"
                             title="cv"
                         >
@@ -268,59 +270,73 @@ function Home() {
                         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                         className="content-start w-full mt-40 lg:pl-12"
                     >
-                        <div className="w-full rounded-[40px] overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.05)] border border-white/10 grid grid-cols-1 md:grid-cols-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
 
-                            {/* 1. Eğitim - Midnight Blue (#2C3E50) */}
-                            <div className="min-h-[220px] h-full p-6 md:p-8 bg-[#2C3E50] flex flex-col justify-between group hover:bg-[#2C3E50]/90 transition-colors">
-                                <div className="flex justify-between items-start">
-                                    <h4 className="text-3xl font-bold text-white tracking-tight leading-none">Eğitim</h4>
-                                    <GraduationCap className="text-white/80 drop-shadow-md" size={40} />
+                            {/* 1. Eğitim - Cream Card */}
+                            <div className="group relative aspect-[1.6/1] p-6 flex flex-col justify-between bg-[#F2F0E9] text-black transition-transform duration-300 hover:-translate-y-1">
+                                <div className="flex justify-between items-start z-10">
+                                    <h4 className="text-xs font-bold uppercase tracking-widest opacity-60">Eğitim</h4>
+                                    <span className="text-[10px] font-mono opacity-40">01</span>
                                 </div>
-                                <div>
-                                    <p className="text-white text-lg font-bold leading-tight">Sakarya Üniversitesi</p>
-                                    <p className="text-white/70 text-sm mt-1 font-medium">Bilgisayar Müh. (3. Sınıf)</p>
+                                <div className="z-10">
+                                    <p className="text-3xl md:text-4xl font-black tracking-tighter leading-[0.9] mb-2">
+                                        Sakarya<br />Uni.
+                                    </p>
+                                    <p className="text-xs font-bold opacity-60 uppercase tracking-wider">Bilgisayar Müh. 3. Sınıf</p>
                                 </div>
+                                <GraduationCap className="absolute bottom-4 right-4 text-black opacity-[1.0] group-hover:opacity-[0.07] transition-opacity scale-[2.5] origin-bottom-right" strokeWidth={1.5} />
                             </div>
 
-                            {/* 2. Alanlar - Nephritis Green (#27AE60) */}
-                            <div className="min-h-[220px] h-full p-6 md:p-8 bg-[#27AE60] flex flex-col justify-between group hover:bg-[#27AE60]/90 transition-colors">
-                                <div className="flex justify-between items-start">
-                                    <h4 className="text-3xl font-bold text-white tracking-tight leading-none">Odak<br />Alanları</h4>
-                                    <Brain className="text-white/80 drop-shadow-sm" size={40} />
+                            {/* 2. Alanlar - Silver Card */}
+                            <div className="group relative aspect-[1.6/1] p-6 flex flex-col justify-between bg-[#C4C4C4] text-black transition-transform duration-300 hover:-translate-y-1">
+                                <div className="flex justify-between items-start z-10">
+                                    <h4 className="text-xs font-bold uppercase tracking-widest opacity-60">Alanlar</h4>
+                                    <span className="text-[10px] font-mono opacity-40">02</span>
                                 </div>
-                                <div>
-                                    <p className="text-white text-lg font-bold leading-tight">Machine Learning</p>
-                                    <p className="text-white/80 text-sm mt-1 font-medium">Deep Learning, RL</p>
+                                <div className="z-10">
+                                    <p className="text-3xl md:text-4xl font-black tracking-tighter leading-[0.9] mb-2">
+                                        Machine<br />Learning
+                                    </p>
+                                    <p className="text-xs font-bold opacity-60 uppercase tracking-wider">Deep Learning • RL</p>
                                 </div>
+                                <Brain className="absolute bottom-4 right-4 text-black opacity-[1.0] group-hover:opacity-[0.07] transition-opacity scale-[2.5] origin-bottom-right" strokeWidth={1.5} />
                             </div>
 
-                            {/* 3. Stack - Light Cream (#FDFFE6) */}
-                            <div className="min-h-[220px] h-full p-6 md:p-8 bg-[#FDFFE6] flex flex-col justify-between group hover:brightness-95 transition-all">
-                                <div className="flex justify-between items-start">
-                                    <h4 className="text-3xl font-bold text-[#2C3E50] tracking-tight leading-none">Teknik<br />Stack</h4>
-                                    <Code2 className="text-[#2C3E50]/70 drop-shadow-sm" size={40} />
+                            {/* 3. Stack - Black Card */}
+                            <div className="group relative aspect-[1.6/1] p-6 flex flex-col justify-between bg-[#0A0A0A] text-white transition-transform duration-300 hover:-translate-y-1">
+                                <div className="flex justify-between items-start z-10">
+                                    <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-500">Stack</h4>
+                                    <span className="text-[10px] font-mono text-zinc-700">03</span>
                                 </div>
-                                <div className="flex flex-wrap gap-1.5">
-                                    {['Python', 'C++', 'SQL', 'FastAPI', 'PyTorch', 'OpenCV'].map((tech) => (
-                                        <span key={tech} className="text-[11px] bg-[#2C3E50]/10 border border-[#2C3E50]/10 px-2 py-1 rounded-md text-[#2C3E50] font-bold">
-                                            {tech}
-                                        </span>
-                                    ))}
+                                <div className="z-10">
+                                    <p className="text-3xl md:text-4xl font-black tracking-tighter leading-[0.9] mb-3">
+                                        Teknik<br />Stack
+                                    </p>
+                                    <div className="flex flex-wrap gap-1.5 opacity-80">
+                                        {['Python', 'C++', 'PyTorch', 'OpenCV', 'Numpy', 'Pandas', 'Scikit-learn'].map(t => (
+                                            <span key={t} className="text-[10px] border border-zinc-800 bg-zinc-900/50 px-2 py-0.5 rounded-full text-zinc-400 font-medium">
+                                                {t}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
+                                <Code2 className="absolute bottom-4 right-4 text-white opacity-[1.0] group-hover:opacity-[0.07] transition-opacity scale-[2.5] origin-bottom-right" strokeWidth={1.5} />
                             </div>
 
-                            {/* 4. Dil - Pumpkin Orange (#D35400) */}
-                            <div className="min-h-[220px] h-full p-6 md:p-8 bg-[#D35400] flex flex-col justify-between group hover:bg-[#D35400]/90 transition-colors">
-                                <div className="flex justify-between items-start">
-                                    <h4 className="text-3xl font-bold text-white tracking-tight leading-none">Dil<br />Yetkinliği</h4>
-                                    <Globe className="text-white/80 drop-shadow-md" size={40} />
+                            {/* 4. Dil - Lime/Yellow Card */}
+                            <div className="group relative aspect-[1.6/1] p-6 flex flex-col justify-between bg-[#689466] text-black transition-transform duration-300 hover:-translate-y-1">
+                                <div className="flex justify-between items-start z-10">
+                                    <h4 className="text-xs font-bold uppercase tracking-widest opacity-60">Dil</h4>
+                                    <span className="text-[10px] font-mono opacity-40">04</span>
                                 </div>
-                                <div>
-                                    <p className="text-white text-lg font-bold leading-tight">İngilizce (B2)</p>
-                                    <p className="text-white/80 text-sm mt-1 font-medium">Hazırlık + Teknik Literatür</p>
+                                <div className="z-10">
+                                    <p className="text-3xl md:text-4xl font-black tracking-tighter leading-[0.9] mb-2">
+                                        İngilizce<br />(B2)
+                                    </p>
+                                    <p className="text-xs font-bold opacity-80 uppercase tracking-wider">Hazırlık + Teknik</p>
                                 </div>
+                                <Globe className="absolute bottom-4 right-4 text-black opacity-[1.00] group-hover:opacity-[0.07] transition-opacity scale-[2.5] origin-bottom-right" strokeWidth={1.5} />
                             </div>
-
                         </div>
                     </motion.div>
                 </div>
@@ -364,6 +380,38 @@ function Home() {
                 </motion.div>
 
             </section>
+
+            {/* 5. SOCIAL MEDIA */}
+            <div className="pt-0 pb-10 -mt-16 flex justify-center bg-black relative z-10">
+                <div className="bg-[#0f0f11] border border-zinc-800 rounded-full px-6 py-3 flex items-center gap-6 hover:border-zinc-700 transition-colors shadow-2xl shadow-black">
+                    <a href="https://github.com/talh4kaya" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-white transition-colors hover:scale-110 transform duration-200">
+                        <Github size={20} />
+                    </a>
+                    <a href="https://www.linkedin.com/in/talha-kaya-aa5255340" target="_blank" rel="noopener noreferrer" className="text-[#0077b5] hover:text-white transition-colors hover:scale-110 transform duration-200">
+                        {/* Solid/Filled LinkedIn Logo */}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.kaggle.com/talh4kaya" target="_blank" rel="noopener noreferrer" className="text-[#20BEFF] hover:text-white transition-colors hover:scale-110 transform duration-200">
+                        {/* Simple Kaggle Icon SVG */}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18.825 23.9997H14.888L9.58 15.6597L9.57 15.6597L8.03 14.1697V23.9997H4V0H8.03V10.9697L13.9 4.90967H18.577L11.5 12.0697L18.825 23.9997Z" />
+                        </svg>
+                    </a>
+                    <a href="mailto:talh4kaya@gmail.com" className="text-[#3dab1b] hover:text-white transition-colors hover:scale-110 transform duration-200">
+                        {/* Gmail M Logo */}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            {/* 6. FOOTER (NAME) */}
+            <footer className="py-6 flex justify-center bg-black text-white ">
+                <span className="text-zinc-600 font-bold tracking-widest text-xs ">Developed by Talha Kaya © 2026</span>
+            </footer>
 
         </div>
     );

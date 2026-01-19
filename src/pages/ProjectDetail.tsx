@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { portfolioData } from '../data/portfolio';
-import { ArrowLeft, Code2, Cpu, Database, Layers } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const ProjectDetail = () => {

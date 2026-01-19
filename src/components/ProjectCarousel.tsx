@@ -1,63 +1,89 @@
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { portfolioData } from '../data/portfolio';
-import { ArrowRight } from 'lucide-react';
+import { ArrowUpRight, Code2, Brain, Terminal, Layout } from 'lucide-react';
 
 const projects = portfolioData.projects;
 
+// Helper to get an icon based on project type/name
+const getProjectIcon = (name: string) => {
+    const n = name.toLowerCase();
+    if (n.includes('ai') || n.includes('vis') || n.includes('gpt')) return <Brain size={20} className="text-white" />;
+    if (n.includes('terminal') || n.includes('cli')) return <Terminal size={20} className="text-white" />;
+    if (n.includes('portfolio') || n.includes('web')) return <Layout size={20} className="text-white" />;
+    return <Code2 size={20} className="text-white" />;
+};
+
 const ProjectCarousel = () => {
+    // Duplicate projects to create seamless loop
+    const allProjects = [...projects, ...projects];
+
     return (
-        <div className="w-full py-10 flex justify-center">
-            {/* Grid Container */}
-            <div className="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 px-6">
-                {projects.map((project, index) => {
+        <div className="w-full py-16 overflow-hidden relative">
+
+            {/* Gradient Fade Edges for smooth entry/exit */}
+            <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+
+            {/* Marquee Track */}
+            <div className="flex w-max animate-scroll gap-6 hover:pause">
+                {allProjects.map((project, idx) => {
+                    const uniqueKey = `${project.id}-${idx}`;
                     return (
-                        <motion.div
-                            key={project.name}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="group relative bg-black border border-zinc-800 rounded-[32px] p-8 min-h-[380px] h-full flex flex-col justify-between hover:border-zinc-600 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.05)] hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]"
+                        <div
+                            key={uniqueKey}
+                            className="w-[600px] h-[350px] shrink-0 bg-[#0f0f11] border border-[#1f1f23] rounded-2xl p-6 flex flex-col justify-between group hover:border-zinc-700 transition-colors"
                         >
-                            {/* Main Content: Title & Description */}
-                            <div className="flex flex-col">
-                                <h3 className="text-3xl font-bold text-white mb-4 leading-tight tracking-tight">
-                                    {project.name.split('(')[0].trim()}
-                                </h3>
-
-                                <div className="relative overflow-hidden">
-                                    <p className="text-zinc-400 text-base leading-relaxed line-clamp-4">
-                                        {project.desc}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Footer: Tech Stack (Left) & Link (Right) */}
-                            <div className="flex justify-between items-end mt-8">
-                                {/* Tech Stack - Bottom Left */}
-                                <div className="flex flex-wrap gap-2 max-w-[60%]">
-                                    {project.tech.map((t) => (
-                                        <span
-                                            key={t}
-                                            className="px-4 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs font-medium text-zinc-400 hover:text-white hover:border-zinc-600 transition-colors cursor-default"
-                                        >
-                                            {t}
-                                        </span>
-                                    ))}
+                            {/* Header: Avatar + User Info */}
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="flex gap-3 items-center">
+                                    <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700 relative overflow-hidden">
+                                        {getProjectIcon(project.name)}
+                                        {/* Status Dot */}
+                                        <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#0f0f11]"></div>
+                                    </div>
+                                    <div className="flex flex-col leading-tight">
+                                        <h4 className="font-bold text-white text-2xl">{project.name}</h4>
+                                        <span className="text-xs text-zinc-500 font-mono">@talh4kaya</span>
+                                    </div>
                                 </div>
 
-                                {/* Link - Bottom Right */}
-                                <Link to={`/project/${project.id}`} className="flex items-center gap-2 text-[#007acc] font-semibold text-base group/btn shrink-0">
-                                    Daha fazla bilgi al
-                                    <ArrowRight size={18} className="transform group-hover/btn:translate-x-1 transition-transform" />
+                                <Link
+                                    to={`/project/${project.id}`}
+                                    className="text-zinc-600 hover:text-white transition-colors"
+                                >
+                                    <ArrowUpRight size={18} />
                                 </Link>
                             </div>
-                        </motion.div>
+
+                            {/* Content */}
+                            <div className="mb-6">
+                                <p className="text-zinc-300 text-xl leading-relaxed line-clamp-5">
+                                    {project.desc}
+                                </p>
+                            </div>
+
+                            {/* Footer: Badge */}
+                            <div className="flex items-center gap-2 mt-auto">
+                                <div className="bg-[#1a0b0b] border border-red-900/30 rounded px-2 py-1 flex items-center gap-2">
+                                    <span className="w-5 h-5 rounded bg-red-600 flex items-center justify-center text-[9px] font-bold text-black">DT</span>
+                                    <span className="text-[10px] uppercase font-bold tracking-wider text-red-500/80">Talha Kaya Project</span>
+                                </div>
+                                <div className="text-sm text-zinc-400 font-bold font-mono ml-auto">
+                                    {project.tech[0]} app
+                                </div>
+                            </div>
+
+                        </div>
                     );
                 })}
             </div>
+
+            {/* Hover to pause styling */}
+            <style>{`
+                .hover\\:pause:hover {
+                    animation-play-state: paused;
+                }
+            `}</style>
         </div>
     );
 };
