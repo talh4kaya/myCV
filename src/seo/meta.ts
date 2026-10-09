@@ -48,6 +48,7 @@ const personJsonLd = {
         'https://www.linkedin.com/in/talha-kaya-aa5255340',
         'https://github.com/talh4kaya',
         'https://www.kaggle.com/talh4kaya',
+        'https://huggingface.co/talh4kaya',
     ],
     email: 'mailto:talh4kaya@gmail.com',
     knowsAbout: ['Machine Learning', 'Data Science', 'Computer Vision', 'Large Language Models', 'RAG', 'Python', 'PyTorch'],

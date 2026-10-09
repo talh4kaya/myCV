@@ -32,7 +32,7 @@ export type Reading = {
     image?: string;    // kapak görseli (public/blog/ altında)
     excerpt: string;    // kart önizleme metni (2-3 cümle)
     highlights: string[]; // makaledeki dikkat çekici noktalar
-    comment: string;    // senin yorumun
+    comment?: string;   // senin yorumun (opsiyonel; yoksa "Düşüncelerim" bölümü gösterilmez)
     content?: BlogBlock[]; // uzun blog yazısı (opsiyonel)
 };
 
@@ -55,7 +55,6 @@ export const readings: Reading[] = [
             "Kullanıcı bir ajana 'seçim kampanyası başlat' dediğinde, ajan bunu kendi inisiyatifiyle kasabaya yaydı.",
             "Sims'e benzer bir sanal ortamda 25 ajanın yalnızca birinin 'parti yapıyorum' demesiyle tüm kasabaya yayılan bir parti organize edildi.",
         ],
-        comment: "[ Yorumunu buraya yaz ]",
         content: [
             { type: "p", text: "Öncelikle bu konu, yani large language modellerin insan davranışı analizi yapabilmesi ve yaparsa ne kadar başarılı olur sorusu, benim de son zamanlarda üstüne çalıştığım, hatta 2 adet proje geliştirdiğim bir konu. Burada aslında konuşmanın ötesinde bir cevap arayışımız var: insan davranışını ne kadar simüle edebilir ve modelleyebiliriz? Çünkü gerçek hayatta bir kişiyle karşılaştığında o kişi hakkında beynin bir sürü yargıya varabiliyor; ama bu tamamen hissi bir iş. Acaba makineye bu hissi algoritma olarak nasıl anlatabiliriz? Çünkü makineler düşünemez, hisleri ve ruhları yoktur." },
             { type: "p", text: "Bu makalede asıl dikkatimi çeken hem mimarisi hem de bunu LLM'ler ile insan davranışlarını analiz etmeye çalışması. Blogdaki diğer yazılarda da, okuduğum ve kendi çapımda incelediğim makalelerde, benzer konuları göreceksiniz, bazıları yine LLM'lerin insan davranışlarını simüle etmesi, LLM'ler ile insan davranışı analizi gibi konuları ele alıyor." },
@@ -108,7 +107,7 @@ export const readings: Reading[] = [
                     { label: "1 hafta önce", value: "0.43" },
                     { label: "1 ay önce", value: "çok düşük" },
                 ],
-                note: "aslında bu değerler ile bilgisayar yani LLM in unutma formülü gibi düşünebilirsiniz araştırmacıların katsayıyı 0.995 seçmeside tamamiyle bir ortalama ve makul bir katsayı bulma çabası.",
+                note: "aslında bu değerler ile bilgisayar yani LLM in unutma formülü gibi düşünebilirsiniz araştırmacıların katsayıyı 0.995 seçmesi de tamamen bir ortalama ve makul bir katsayı bulma çabası.",
             },
             { type: "h3", text: "2) Importance (Önem)" },
             { type: "p", text: "Sıradan anıları önemli anılardan ayırır.Zaten gerçektede böyledir yani kendi doğum gününde yaşadıklarınız yada mutlu yada hüzünlü olduğunuz günler diğer günlerden daha net hatırladığınız ve önemmli günlerdir ne kadar süre geçerse geçsin. burda da araştırmacılar doğrudan LLM'e soruyorlar:" },
@@ -450,7 +449,6 @@ export const readings: Reading[] = [
             "Yeni bir dünyaya geçince öğrendiği becerileri sıfırdan transfer edebildi, diğer yöntemler bunu yapamadı.",
             "Aynı sürede 3.3× daha fazla benzersiz item, 2.3× daha fazla mesafe, teknoloji ağacında 15.3× daha hızlı ilerleme.",
         ],
-        comment: "[ Yorumunu buraya yaz ]",
         content: [
             { type: "p", text: "VOYAGER adında bir yapay zeka ajanı geliştirmişler. Bu ajan Minecraft oyununda tamamen kendi kendine, hiç insan müdahalesi olmadan oynuyor, yeni şeyler keşfediyor ve beceriler öğreniyor." },
 
@@ -621,7 +619,6 @@ export const readings: Reading[] = [
             "Dil modelleme ve makine çevirisi görevlerinde sınırlı bağlaçlı modellere göre anlamlı kazanım sağlıyor.",
             "Model parametrelerini artırmadan sadece mimari değişiklikle uzun bağlam kapasitesi genişletilebiliyor.",
         ],
-        comment: "[ Yorumunu buraya yaz ]",
         content: [
             { type: "p", text: "Standart Transformer'ların temel problemi context uzadıkça hesaplama maliyeti de artar." },
             { type: "p", text: "Mevcut Transformer'da dikkat mekanizması O(L × (L + L_LTM)) karmaşıklığa sahip. Yani geçmişe ne kadar bakacaksan, o kadar pahalı ki bunu özellikle ödevde yada proje yaparken yada katıldığım yarışmalarda verdiğim belgeleri tekrar tekrar kontrol ettirmem gerekirken bağlamdan kopma sorununu yaşıyorum hatta bence yaşıyoruz. Pratikte transformer'lar belirli bir pencere uzunluğuyla sınırlı kalıyor, eski bilgiyi ya siliyor ya da sıkıştırıyor. Özellikle Claude kullanıyorsanız orda sohbeti devam ettiriken bağlamdan kopmamak için sıkıştırdığını görürsünüz, yada terminalde kullanırken zaten siz yapıyorsunuzdur." },
@@ -864,7 +861,6 @@ export const readings: Reading[] = [
             "Standart LLM chatbot'lara kıyasla kişilik tutarlılığı ve sosyal uyum önemli ölçüde artıyor.",
             "Aynı mimari iş görüşmeleri senaryosuna da uygulandı, 'hiring' kullanım durumu.",
         ],
-        comment: "[ Yorumunu buraya yaz ]",
         content: [
             { type: "p", text: "bugünki blogda yine LLM ler ile insan duygularının analizini inceleyeceğiz.işte makalede bunu ele alıyor." },
             { type: "p", text: "şimdi ilk olarak neden duyguları simüle edemiyorlar bunu anlamak lazım makalede geçen 2 problemi direkt aktarıcam sizlere." },
@@ -970,7 +966,6 @@ export const readings: Reading[] = [
             "MNIST deneyinde 3 rakamını hiç görmeden %98 doğrulukla tanıyan Student modeli — dark knowledge kanıtlandı.",
             "Generalist + Specialist model mimarisi tek büyük modele kıyasla hem daha hızlı hem daha doğru.",
         ],
-        comment: "[ Yorumunu buraya yaz ]",
         content: [
             { type: "p", text: "Geoffrey Hinton bu makalenin temelinde. Bu adamı konuşacağız ve onun kendine ve makineye sorduğu soruları yorumlayacağız. Bir problemi fark etmekten başlayalım." },
 

@@ -161,7 +161,7 @@ const Home = () => {
                                 </div>
                                 <p className="split-desc">
                                     6 farklı siyasi profil ve 20 halk tipini simüle eden, tamamen yerel Llama ile çalışan çok ajanlı
-                                    siyasi simülasyon motoru. tamamiyle otonom ve isteğe bağlı kullanıcı müdahele modu ile modellerin gerçek dünya simulasyonunu incelendim.
+                                    siyasi simülasyon motoru. Tamamen otonom çalışan ve isteğe bağlı kullanıcı müdahalesi modu sunan bu yapıyla modellerin gerçek dünyayı ne kadar iyi simüle edebildiğini inceledim.
                                 </p>
                                 <div className="split-tags">
                                     <span>Python</span><span>FastAPI</span><span>Llama</span><span>Multi Agent</span>
@@ -282,7 +282,7 @@ const Home = () => {
                                 <img src="/icons/github-sign.png" alt="GitHub" />
                             </a>
                             <a
-                                href="https://huggingface.co/"
+                                href="https://huggingface.co/talh4kaya"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 title="Hugging Face"

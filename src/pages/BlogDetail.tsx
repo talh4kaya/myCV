@@ -412,7 +412,7 @@ const BlogDetail = () => {
     }
 
     const readingTime = post.content && post.content.length > 0 ? calcReadingTime(post.content) : null;
-    const hasComment = post.comment && post.comment !== '[ Yorumunu buraya yaz ]';
+    const hasComment = Boolean(post.comment?.trim());
 
     return (
         <>

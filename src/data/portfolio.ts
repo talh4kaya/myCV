@@ -71,7 +71,7 @@ export const portfolioData = {
           {
             title: "Tasarım Sistemi",
             content:
-              "Hiçbir UI kütüphanesi kullanmadım. Tüm componentler, renkler, tipografi ve animasyonlar tamamen sıfırdan CSS ile yazıldı. Koyu tema, özel değişkenler ve tutarlı bir görsel dil oluşturdum.Web Developer olmadığım için bunları yaparken Claude Code'dan çok fazla yardım adlım ve etkin ullandım hatta bu süreçte Claude Code 'u nasıl daha iyi kullancağım hakkında da oldukça bilgi sahibi oldum."
+              "Hiçbir UI kütüphanesi kullanmadım. Tüm componentler, renkler, tipografi ve animasyonlar tamamen sıfırdan CSS ile yazıldı. Koyu tema, özel değişkenler ve tutarlı bir görsel dil oluşturdum. Web developer olmadığım için bu süreçte Claude Code'dan çok fazla yardım aldım ve onu etkin şekilde kullandım; hatta Claude Code'u nasıl daha iyi kullanacağım konusunda da oldukça bilgi sahibi oldum."
           },
           {
             title: "Blog Altyapısı",
@@ -322,6 +322,7 @@ export const portfolioData = {
     github: "https://github.com/talh4kaya",
     linkedin: "https://www.linkedin.com/in/talha-kaya-aa5255340",
     kaggle: "https://www.kaggle.com/talh4kaya",
+    huggingface: "https://huggingface.co/talh4kaya",
     website: "https://talhakaya.net",
     email: "talh4kaya@gmail.com"
   }
