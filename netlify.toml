@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Yönlendirmeler (_redirects) ve güvenlik başlıkları (_headers) build sırasında
+# build/sitePlugin.ts tarafından dist/ içine yazılır.
+#
+# Gerekli ortam değişkenleri (Netlify > Site configuration > Environment variables):
+#   GEMINI_API_KEY                -> sadece sunucu (chat fonksiyonu). VITE_ öneki KOYMA.
+#   VITE_FIREBASE_*               -> tarayıcı tarafı Firebase config'i (gizli değil)
