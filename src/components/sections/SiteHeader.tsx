@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useChatbot } from '../ChatbotContext';
+import { useChatbot } from '../useChatbot';
 import ThemeToggle from '../ThemeToggle';
 
 const SiteHeader = () => {

@@ -1,25 +1,48 @@
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { portfolioData } from '../data/portfolio';
+import SiteHeader from '../components/sections/SiteHeader';
+import SiteFooter from '../components/sections/SiteFooter';
+
+const BackLink = () => (
+    <Link to="/#all-projects" className="project-detail-back">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+        </svg>
+        Projeler
+    </Link>
+);
 
 const ProjectDetail = () => {
     const { id } = useParams<{ id: string }>();
     const project = portfolioData.projects.find((p) => p.id === id);
 
+    // Bir projeden diğerine geçince de sayfanın başına dön
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, []);
+    }, [id]);
 
     if (!project) {
         return (
-            <div className="project-detail-page">
-                <div className="project-detail-inner" style={{ textAlign: 'center' }}>
-                    <h1 className="project-detail-title">Proje Bulunamadı</h1>
-                    <Link to="/" className="project-detail-back">
-                        ← Ana Sayfaya Dön
-                    </Link>
-                </div>
-            </div>
+            <>
+                <SiteHeader />
+                <main className="project-detail-page" style={{ textAlign: 'center' }}>
+                    <h1 className="project-detail-title">Proje bulunamadı</h1>
+                    <BackLink />
+                </main>
+                <SiteFooter />
+            </>
         );
     }
 
@@ -27,25 +50,11 @@ const ProjectDetail = () => {
     const subtitle = project.name.split('(')[1]?.replace(')', '') ?? project.desc;
 
     return (
-        <div className="project-detail-page">
-            <div className="project-detail-inner">
-                <Link to="/" className="project-detail-back">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <line x1="19" y1="12" x2="5" y2="12" />
-                        <polyline points="12 19 5 12 12 5" />
-                    </svg>
-                    Geri Dön
-                </Link>
+        <>
+            <SiteHeader />
+
+            <main className="project-detail-page">
+                <BackLink />
 
                 <h1 className="project-detail-title">{cleanName}</h1>
                 <p className="project-detail-sub">{subtitle}</p>
@@ -74,10 +83,10 @@ const ProjectDetail = () => {
                         ))}
                     </section>
                 )}
+            </main>
 
-                <div className="project-detail-footer">© 2026 Talha Kaya</div>
-            </div>
-        </div>
+            <SiteFooter />
+        </>
     );
 };
 

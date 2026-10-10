@@ -366,31 +366,64 @@ const renderBlock = (block: BlogBlock, i: number) => {
     }
 };
 
+/* ---------- beğeni durumu (sadece bu tarayıcıda saklanır) ---------- */
+// Gizli sekme / engellenmiş çerezlerde localStorage hata fırlatabilir;
+// bu durumda sayfa çökmesin, butonlar yine çalışsın (sadece kalıcı olmaz).
+const readFlag = (key: string) => {
+    try {
+        return localStorage.getItem(key) === '1';
+    } catch {
+        return false;
+    }
+};
+const writeFlag = (key: string, value: boolean) => {
+    try {
+        localStorage.setItem(key, value ? '1' : '0');
+    } catch {
+        // yoksay
+    }
+};
+
 /* ---------- main component ---------- */
+// Bir yazıdan diğerine geçerken bileşen yeniden kullanıldığı için önceki
+// yazının beğeni durumu taşınıyordu; key={id} ile her yazı temiz başlar.
 const BlogDetail = () => {
     const { id } = useParams<{ id: string }>();
+    return <BlogPost key={id} id={id} />;
+};
+
+const BlogPost = ({ id }: { id: string | undefined }) => {
     const post = readings.find((r) => r.id === id);
 
     const storageKey = (suffix: string) => `blog_${id}_${suffix}`;
 
-    const [liked, setLiked] = useState(() => localStorage.getItem(storageKey('liked')) === '1');
-    const [starred, setStarred] = useState(() => localStorage.getItem(storageKey('starred')) === '1');
-    const [disliked, setDisliked] = useState(() => localStorage.getItem(storageKey('disliked')) === '1');
+    const [liked, setLiked] = useState(() => readFlag(storageKey('liked')));
+    const [starred, setStarred] = useState(() => readFlag(storageKey('starred')));
+    const [disliked, setDisliked] = useState(() => readFlag(storageKey('disliked')));
 
+    // Beğen ve beğenme aynı anda aktif olamaz
     const toggleLike = () => {
         const next = !liked;
         setLiked(next);
-        localStorage.setItem(storageKey('liked'), next ? '1' : '0');
+        writeFlag(storageKey('liked'), next);
+        if (next && disliked) {
+            setDisliked(false);
+            writeFlag(storageKey('disliked'), false);
+        }
     };
     const toggleStar = () => {
         const next = !starred;
         setStarred(next);
-        localStorage.setItem(storageKey('starred'), next ? '1' : '0');
+        writeFlag(storageKey('starred'), next);
     };
     const toggleDislike = () => {
         const next = !disliked;
         setDisliked(next);
-        localStorage.setItem(storageKey('disliked'), next ? '1' : '0');
+        writeFlag(storageKey('disliked'), next);
+        if (next && liked) {
+            setLiked(false);
+            writeFlag(storageKey('liked'), false);
+        }
     };
 
     // id değişince (bir blogdan diğerine geçince) bileşen yeniden mount olmaz,

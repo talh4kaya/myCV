@@ -1,23 +1,8 @@
-import { createContext, useContext, useState, useCallback, useRef, type ReactNode } from 'react';
+import { useState, useCallback, useRef, type ReactNode } from 'react';
+import { ChatbotContext, type ChatMessage } from './useChatbot';
 import { getGeminiResponseStream } from '../services/gemini';
 import { sanitizeInput } from '../services/chatGuard';
 import { savePromptToFirebase } from '../services/firebase';
-
-export type ChatMessage = {
-    role: 'bot' | 'user';
-    content: string;
-};
-
-type ChatbotContextValue = {
-    messages: ChatMessage[];
-    isTyping: boolean;
-    sendMessage: (text: string) => Promise<void>;
-    isFullscreenOpen: boolean;
-    openFullscreen: () => void;
-    closeFullscreen: () => void;
-};
-
-const ChatbotContext = createContext<ChatbotContextValue | undefined>(undefined);
 
 const INITIAL_MESSAGE: ChatMessage = {
     role: 'bot',
@@ -93,10 +78,4 @@ export const ChatbotProvider = ({ children }: { children: ReactNode }) => {
             {children}
         </ChatbotContext.Provider>
     );
-};
-
-export const useChatbot = () => {
-    const ctx = useContext(ChatbotContext);
-    if (!ctx) throw new Error('useChatbot must be used within ChatbotProvider');
-    return ctx;
 };

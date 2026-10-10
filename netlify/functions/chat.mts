@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { SYSTEM_PROMPT } from "../lib/chatPrompt";
 import { sanitizeInput } from "../../src/services/chatGuard";
 
@@ -7,7 +7,35 @@ import { sanitizeInput } from "../../src/services/chatGuard";
 // olarak tanımlanmalı (VITE_ öneki OLMADAN — VITE_ önekli değişkenler
 // tarayıcı bundle'ına gömülür ve herkes tarafından okunabilir).
 const API_KEY = process.env.GEMINI_API_KEY;
-const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
+const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
+
+// Önce sabit model denenir (davranışı öngörülebilir); kullanımdan kalkar veya
+// hata verirse Google'ın her zaman güncel Flash modelini gösteren takma ada
+// düşülür — böylece model emekliye ayrıldığında chatbot susmaz.
+// İstenirse Netlify'da GEMINI_MODEL ortam değişkeniyle ana model değiştirilebilir.
+const MODELS = [process.env.GEMINI_MODEL || "gemini-2.5-flash", "gemini-flash-latest"];
+
+const startStream = async (message: string) => {
+  let lastError: unknown;
+  for (const model of MODELS) {
+    try {
+      return await ai!.models.generateContentStream({
+        model,
+        contents: [{ role: "user", parts: [{ text: message }] }],
+        config: {
+          systemInstruction: SYSTEM_PROMPT,
+          maxOutputTokens: 1024,
+          // 2.5 modellerinde "düşünme"yi kapatmak cevabı hızlandırır;
+          // yeni modeller bu ayarı farklı yönetiyor, onlara gönderilmez.
+          ...(model.startsWith("gemini-2.5") ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+        },
+      });
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
+};
 
 const MAX_BODY_BYTES = 4_000;
 
@@ -27,6 +55,17 @@ const isRateLimited = (ip: string): boolean => {
   return recent.length > RATE_LIMIT;
 };
 
+// "null" veya bozuk bir Origin başlığı URL ayrıştırmasını patlatmasın
+const isSameOrigin = (req: Request): boolean => {
+  const origin = req.headers.get("origin");
+  if (!origin) return false;
+  try {
+    return new URL(origin).host === new URL(req.url).host;
+  } catch {
+    return false;
+  }
+};
+
 const json = (status: number, body: Record<string, string>) =>
   new Response(JSON.stringify(body), {
     status,
@@ -40,8 +79,7 @@ export default async (req: Request, context: { ip?: string }) => {
 
   // Sadece kendi sitemizden gelen tarayıcı isteklerini kabul et
   // (başka sitelerin bu uç noktayı kendi sayfalarında kullanmasını engeller).
-  const origin = req.headers.get("origin");
-  if (!origin || new URL(origin).host !== new URL(req.url).host) {
+  if (!isSameOrigin(req)) {
     return json(403, { error: "forbidden" });
   }
 
@@ -70,31 +108,19 @@ export default async (req: Request, context: { ip?: string }) => {
     return json(400, { error: check.reason ?? "bad_request" });
   }
 
-  if (!genAI) {
+  if (!ai) {
     return json(503, { error: "not_configured" });
   }
 
   try {
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      systemInstruction: SYSTEM_PROMPT,
-      generationConfig: {
-        maxOutputTokens: 1024,
-        // @ts-expect-error - thinkingConfig SDK type'larında henüz yok ama API kabul ediyor
-        thinkingConfig: { thinkingBudget: 0 },
-      },
-    });
-
-    const result = await model.generateContentStream({
-      contents: [{ role: "user", parts: [{ text: message.trim() }] }],
-    });
+    const result = await startStream(message.trim());
 
     const encoder = new TextEncoder();
     const stream = new ReadableStream<Uint8Array>({
       async start(controller) {
         try {
-          for await (const chunk of result.stream) {
-            const text = chunk.text();
+          for await (const chunk of result) {
+            const text = chunk.text;
             if (text) controller.enqueue(encoder.encode(text));
           }
         } catch {

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useChatbot } from './ChatbotContext';
+import { useChatbot } from './useChatbot';
+import { MAX_MESSAGE_LENGTH } from '../services/chatGuard';
 
 const MakapakaFullscreen = () => {
     const { messages, isTyping, sendMessage, isFullscreenOpen, closeFullscreen } = useChatbot();
@@ -78,6 +79,7 @@ const MakapakaFullscreen = () => {
                         type="text"
                         placeholder="Bir şey sor..."
                         autoComplete="off"
+                        maxLength={MAX_MESSAGE_LENGTH}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => {

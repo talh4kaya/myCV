@@ -2889,15 +2889,6 @@ input.phone-input-field::placeholder {
   margin-bottom: 8px;
 }
 
-.project-detail-footer {
-  margin-top: 48px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text-faint);
-  text-align: center;
-}
-
 /* ── Blog responsive ── */
 @media (max-width: 1100px) {
   .blog-grid {

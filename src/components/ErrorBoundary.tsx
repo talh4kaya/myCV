@@ -23,7 +23,6 @@ class ErrorBoundary extends Component<Props, State> {
 
     componentDidCatch(error: Error, info: ErrorInfo): void {
         // Üretimde sadece console'a düşüyor, kullanıcı görmüyor
-        // eslint-disable-next-line no-console
         console.error('Site error:', error, info);
     }
 

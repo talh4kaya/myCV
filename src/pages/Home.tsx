@@ -4,6 +4,7 @@ import SiteHeader from '../components/sections/SiteHeader';
 import SiteFooter from '../components/sections/SiteFooter';
 import MakapakaCard from '../components/MakapakaCard';
 import ContactForm from '../components/sections/ContactForm';
+import { portfolioData } from '../data/portfolio';
 
 const Home = () => {
     const location = useLocation();
@@ -183,6 +184,30 @@ const Home = () => {
                             <p className="split-title">LLM · VLM · RAG · OCR</p>
                         </div>
                     </article>
+                </section>
+
+                <section className="clients" id="all-projects">
+                    <p className="section-label">Tüm Projelerim</p>
+
+                    {portfolioData.projects.map((project) => {
+                        const [name, sub] = project.name.split('(');
+                        return (
+                            <div className="testimonial" key={project.id}>
+                                <div className="exp-meta">
+                                    <h3>{name.trim()}</h3>
+                                    <p className="exp-sub">{sub ? sub.replace(')', '') : project.tech.join(' · ')}</p>
+                                </div>
+                                <div className="testimonial-body comp-detail">
+                                    <p>{project.desc}</p>
+                                    <p>
+                                        <Link to={`/project/${project.id}`} className="link-arrow">
+                                            Detaylar →
+                                        </Link>
+                                    </p>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </section>
 
                 <section className="clients" id="competitions">
