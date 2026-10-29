@@ -10,7 +10,7 @@ export const portfolioData = {
       "İngilizce (B2 – Hazırlık Eğitimi)"
     ],
     summary:
-      "Problem çözme yeteneği yüksek, tasarım bakış açısına sahip ve iletişimi güçlü bir mühendis adayıyım. Araştırmayı seviyorum, bir şeyin neden ve nasıl çalıştığını merak ediyorum. Özellikle Python ve C++ ile çalışmayı seviyorum. Teorik bilgiyi gerçek dünya problemlerine (OCR, VLM, RAG, Nesne Tespiti, Reinforcement Learning) uyarlamaya odaklanıyorum; okuduğum makaleler üzerine düşüncelerimi yazıyorum."
+      "Problem çözme yeteneği yüksek, tasarım bakış açısına sahip ve iletişimi güçlü bir mühendis adayıyım. Araştırmayı seviyorum, bir şeyin neden ve nasıl çalıştığını merak ediyorum. Özellikle Python ve C++ ile çalışmayı seviyorum. Teorik bilgiyi gerçek dünya problemlerine (OCR, VLM, RAG, Nesne Tespiti, Reinforcement Learning) uyarlamaya odaklanıyorum; okuduğum makaleler üzerine düşüncelerimi yazıyorum. Şu anda İhlas Holding'de Uygulamalı Mühendislik Eğitimi kapsamında holdingin kurumsal veri ve yapay zekâ platformu üzerinde çalışıyorum."
   },
 
   skills: {
@@ -40,6 +40,14 @@ export const portfolioData = {
 
   experience: [
     {
+      company: "İhlas Holding A.Ş.",
+      role: "Yapay Zekâ ve Veri Mühendisliği — Uygulamalı Mühendislik Eğitimi (UMDE)",
+      year: "2026 (devam ediyor)",
+      tech: ["Python", "FastAPI", "MCP", "LiteLLM", "Keycloak", "Trino", "Apache Ranger", "OpenFGA", "dbt", "Airflow", "Docker"],
+      description:
+        "Holding genelinde kullanılan kurumsal yapay zekâ platformunu açık kaynak bileşenlerle şirket altyapısına kurdum; Active Directory'ye bağlı tek oturum açma ve departman/unvana göre otomatik yetkilendirme ekledim. Kişisel verileri dil modeline gitmeden maskeleyen KVKK uyumlu Türkçe anonimleştirme katmanını model geçidine bağladım. Çalışanın doğal dille izin isteyip yalnızca kendi onayıyla kayıt oluşturabildiği bir İK izin asistanı geliştirdim. Katmanlı bir veri gölü (Bronze/Silver/Gold), satır ve kolon düzeyinde yetki ile bunları tek ekrandan yöneten bir yönetim arayüzü kurdum; yeni bir iştirak kod yazmadan yaklaşık bir saatte asistana bağlanabiliyor."
+    },
+    {
       company: "Dijital Varlıklar A.Ş.",
       role: "Yazılım Mühendisi Stajyeri",
       year: "2026",
@@ -53,13 +61,43 @@ export const portfolioData = {
       year: "2025",
       tech: ["Python", "YOLOv11", "OpenCV", "CNN", "NLP"],
       description:
-        "Görüntü işleme ve nesne tespiti alanlarında çalıştım. 65 farklı dil için kelime seviyesinde dil tespiti yapabilen bir model geliştirdim. Standart Tesseract'ın yetersiz kaldığı çok dilli belgelerde YOLOv11 ile metin tespiti uygulayarak doğruluk oranını %40'tan %85'in üzerine çıkardım. Gürültü temizleme, perspektif düzeltme ve data augmentation gibi görüntü ön işleme adımlarını uyguladım."
+        "Görüntü işleme ve nesne tespiti alanlarında çalıştım. 65 farklı dil için kelime seviyesinde dil tespiti yapabilen bir model geliştirdim. Standart Tesseract'ın yetersiz kaldığı çok dilli belgelerde YOLOv11 ile metin tespiti uygulayarak doğruluk oranını %40'tan %85'in üzerine çıkardım. Gürültü temizleme, perspektif düzeltme ve data augmentation gibi görüntü ön işleme adımlarını uyguladım. Geliştirdiğim sistem, bir ilaç fabrikasında reçetelerin hangi dilde yazıldığını belirlemek için hâlâ aktif olarak kullanılıyor."
+    }
+  ],
+
+  // Ana sayfadaki "Aktif kullanılan projelerim" kartları: kısa ve vurucu özet +
+  // kurulan/yönetilen teknolojiler.
+  featuredWork: [
+    {
+      id: "data-lakehouse",
+      org: "İhlas Holding · 2026",
+      title: "Kurumsal Data Lakehouse",
+      punch: "Kaynaktan chatbota otomatik veri hazırlama · role göre görünürlük",
+      summary: "İştiraklerin veritabanı, Excel ve belgelerinden gelen veri otomatik olarak çekiliyor, temizleniyor ve SeaweedFS üzerindeki Iceberg tablolarında Bronze → Silver → Gold katmanlarına işleniyor. Herkes rolüne göre yalnızca görmesi gereken veriyi görüyor.",
+      tech: ["SeaweedFS", "Apache Iceberg", "Apache Polaris", "SeaTunnel (CDC)", "dbt", "Trino", "Airflow", "Apache Ranger", "OpenFGA", "Keycloak"]
+    },
+    {
+      id: "ai-agent-platform",
+      org: "İhlas Holding · 2026",
+      title: "Kurumsal AI Agent Platformu",
+      punch: "Yetki bazlı sorgu · kişiselleştirilmiş agent",
+      summary: "Şirketteki herkes takip ettiği KPI'lara göre kendi agent'ını oluşturup kişiselleştirebiliyor. Agent'lar şirket verisini analiz ediyor, grafikleri sohbette çizip kişisel panolara (dashboard) kaydediyor; her işlemi kullanıcının kendi yetkisiyle yapıyor.",
+      tech: ["LibreChat", "LiteLLM", "IBM ContextForge", "MCP", "A2A", "LangGraph", "Superset", "Cube", "WeKnora (RAG)", "Langfuse"]
+    },
+    {
+      id: "multilingual-ocr",
+      org: "Arvasis · 2025",
+      title: "Çok Dilli Belge OCR ve Dil Tespiti",
+      punch: "65 dil · %85+ doğruluk",
+      summary: "Kelime düzeyinde dil tespiti yapan, YOLOv11 ile metin bölgelerini bulan hibrit bir OCR hattı geliştirdim. Bir ilaç fabrikası, reçetelerin hangi dilde yazıldığını belirlemek için hâlâ aktif olarak kullanıyor.",
+      tech: ["YOLOv11", "OpenCV", "Tesseract", "CNN", "NLP", "Python"]
     }
   ],
 
   projects: [
     {
       id: "ai-portfolio",
+      github: "https://github.com/talh4kaya/myCV",
       name: "AI Portföy Sitesi (Bu Site)",
       tech: ["React", "TypeScript", "Vite", "Firebase", "Gemini AI"],
       desc:
@@ -98,6 +136,7 @@ export const portfolioData = {
     },
     {
       id: "dsiyasi",
+      github: "https://github.com/talh4kaya/dsiyasi",
       name: "DPolitic (Multi-Agent Political Simulation)",
       tech: ["Python", "FastAPI", "Llama", "Multi-Agent", "Local"],
       desc:
@@ -136,6 +175,7 @@ export const portfolioData = {
     },
     {
       id: "mangala-ai",
+      github: "https://github.com/talh4kaya/reinforcement-Learning-Mangala",
       name: "Mangala AI (AlphaZero & Transformer)",
       tech: ["PyTorch", "AlphaZero", "Transformer", "Self-Play", "RL"],
       desc:
@@ -169,6 +209,7 @@ export const portfolioData = {
     },
     {
       id: "repo-chat",
+      github: "https://github.com/talh4kaya/repo-chat",
       name: "Repo-Chat (Privacy-First Local RAG)",
       tech: ["LangChain", "Ollama", "ChromaDB", "Llama-3", "React"],
       desc:
@@ -202,6 +243,7 @@ export const portfolioData = {
     },
     {
       id: "guardian-flow",
+      github: "https://github.com/talh4kaya/Data-Sci-end-to-end-MLops",
       name: "Guardian-Flow (MLOps & Drift)",
       tech: ["MLOps", "Docker", "Evidently AI", "FastAPI", "Grafana"],
       desc:

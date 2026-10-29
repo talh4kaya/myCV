@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useChatbot } from './useChatbot';
 import { MAX_MESSAGE_LENGTH } from '../services/chatGuard';
+import ThinkingSteps from './ThinkingSteps';
 
 const MakapakaFullscreen = () => {
     const { messages, isTyping, sendMessage, isFullscreenOpen, closeFullscreen } = useChatbot();
@@ -66,10 +67,10 @@ const MakapakaFullscreen = () => {
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`fs-msg${msg.role === 'user' ? ' user' : ''}`}>
                             <div className="fs-msg-label">{msg.role === 'user' ? 'Sen' : 'Makapaka'}</div>
-                            <div className="fs-msg-text">{msg.content}</div>
+                            {msg.thinking && <ThinkingSteps thinking={msg.thinking} />}
+                            {msg.content && <div className="fs-msg-text">{msg.content}</div>}
                         </div>
                     ))}
-                    {isTyping && <div className="fs-typing">yazıyor...</div>}
                 </div>
 
                 <div className="fs-input-box">

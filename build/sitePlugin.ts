@@ -10,6 +10,7 @@ import {
     SITE_URL,
     type PageMeta,
 } from '../src/seo/meta';
+import { portfolioData } from '../src/data/portfolio';
 import { securityHeaders } from './securityHeaders';
 
 // Build bittikten sonra çalışır ve SPA'yı arama motorları / sosyal medya
@@ -83,9 +84,16 @@ const buildRedirects = (pages: PageMeta[]) => {
     const rewrites = pages
         .filter((p) => p.path !== '/')
         .map((p) => `${p.path}  ${p.path}.html  200`);
+    // Proje detay sayfaları kaldırıldı; eski adresler GitHub deposuna (yoksa
+    // ana sayfadaki projelere) kalıcı olarak yönlenir, paylaşılmış linkler kırılmaz.
+    const legacyProjects = portfolioData.projects.map(
+        (p) => `/project/${p.id}  ${'github' in p && p.github ? p.github : '/#all-projects'}  301`,
+    );
     return [
         '# Bu dosya build/sitePlugin.ts tarafından üretilir — elle düzenleme.',
         ...rewrites,
+        '',
+        ...legacyProjects,
         '',
         '# Bilinmeyen adresler gerçek 404 döner (SPA yine yüklenir, noindex ile).',
         '/*  /404.html  404',

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useChatbot } from './useChatbot';
 import { MAX_MESSAGE_LENGTH } from '../services/chatGuard';
+import ThinkingSteps from './ThinkingSteps';
 
 /**
  * v4 tasarımındaki "telefon ekranı" chatbot kartı.
@@ -38,10 +39,10 @@ const MakapakaCard = () => {
                             key={idx}
                             className={`assistant-msg-bubble${msg.role === 'user' ? ' user' : ''}`}
                         >
-                            <p>{msg.content}</p>
+                            {msg.thinking && <ThinkingSteps thinking={msg.thinking} />}
+                            {msg.content && <p>{msg.content}</p>}
                         </div>
                     ))}
-                    {isTyping && <div className="phone-typing">yazıyor...</div>}
                 </div>
 
                 <div className="phone-bottom-bar">

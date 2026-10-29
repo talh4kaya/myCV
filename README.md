@@ -84,11 +84,7 @@ VITE_FIREBASE_APP_ID=
 GEMINI_API_KEY=
 ```
 
-Chatbot bir Netlify Function kullandığı için yerelde denemek isterseniz siteyi Netlify CLI ile başlatın:
-
-```bash
-npx netlify-cli dev
-```
+`npm run dev`, chatbot'un Netlify Function'ını da yerelde çalıştırır; ayrıca Netlify CLI gerekmez.
 
 | Komut | Açıklama |
 | --- | --- |

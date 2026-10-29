@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { readings, type BlogBlock } from '../data/readings';
 import SiteHeader from '../components/sections/SiteHeader';
 import SiteFooter from '../components/sections/SiteFooter';
+import BackLink from '../components/BackLink';
 
 /* ---------- reading time ---------- */
 function calcReadingTime(blocks: BlogBlock[]): number {
@@ -366,27 +367,8 @@ const renderBlock = (block: BlogBlock, i: number) => {
     }
 };
 
-/* ---------- beğeni durumu (sadece bu tarayıcıda saklanır) ---------- */
-// Gizli sekme / engellenmiş çerezlerde localStorage hata fırlatabilir;
-// bu durumda sayfa çökmesin, butonlar yine çalışsın (sadece kalıcı olmaz).
-const readFlag = (key: string) => {
-    try {
-        return localStorage.getItem(key) === '1';
-    } catch {
-        return false;
-    }
-};
-const writeFlag = (key: string, value: boolean) => {
-    try {
-        localStorage.setItem(key, value ? '1' : '0');
-    } catch {
-        // yoksay
-    }
-};
-
 /* ---------- main component ---------- */
-// Bir yazıdan diğerine geçerken bileşen yeniden kullanıldığı için önceki
-// yazının beğeni durumu taşınıyordu; key={id} ile her yazı temiz başlar.
+// Bir yazıdan diğerine geçerken her yazı temiz başlasın diye key={id}
 const BlogDetail = () => {
     const { id } = useParams<{ id: string }>();
     return <BlogPost key={id} id={id} />;
@@ -394,37 +376,6 @@ const BlogDetail = () => {
 
 const BlogPost = ({ id }: { id: string | undefined }) => {
     const post = readings.find((r) => r.id === id);
-
-    const storageKey = (suffix: string) => `blog_${id}_${suffix}`;
-
-    const [liked, setLiked] = useState(() => readFlag(storageKey('liked')));
-    const [starred, setStarred] = useState(() => readFlag(storageKey('starred')));
-    const [disliked, setDisliked] = useState(() => readFlag(storageKey('disliked')));
-
-    // Beğen ve beğenme aynı anda aktif olamaz
-    const toggleLike = () => {
-        const next = !liked;
-        setLiked(next);
-        writeFlag(storageKey('liked'), next);
-        if (next && disliked) {
-            setDisliked(false);
-            writeFlag(storageKey('disliked'), false);
-        }
-    };
-    const toggleStar = () => {
-        const next = !starred;
-        setStarred(next);
-        writeFlag(storageKey('starred'), next);
-    };
-    const toggleDislike = () => {
-        const next = !disliked;
-        setDisliked(next);
-        writeFlag(storageKey('disliked'), next);
-        if (next && liked) {
-            setLiked(false);
-            writeFlag(storageKey('liked'), false);
-        }
-    };
 
     // id değişince (bir blogdan diğerine geçince) bileşen yeniden mount olmaz,
     // bu yüzden id'yi bağımlılığa eklemek gerekiyor — yoksa eski scroll konumunda kalır.
@@ -437,7 +388,7 @@ const BlogPost = ({ id }: { id: string | undefined }) => {
                     <SiteHeader />
                     <div className="blog-detail-inner" style={{ textAlign: 'center', paddingTop: 160 }}>
                         <p style={{ color: 'var(--gray)' }}>Makale bulunamadı.</p>
-                        <Link to="/blog" className="bdetail-back">← Blog'a Dön</Link>
+                        <Link to="/blog" className="bdetail-paper-link">← Blog'a Dön</Link>
                     </div>
                 </div>
             </>
@@ -454,16 +405,34 @@ const BlogPost = ({ id }: { id: string | undefined }) => {
 
                 <div className="blog-detail-inner">
 
-                    {/* Geri */}
-                    <Link to="/blog" className="bdetail-back">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                            strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M19 12H5" /><path d="M12 19l-7-7 7-7" />
-                        </svg>
-                        Blog
-                    </Link>
+                    <BackLink to="/blog" label="Blog'a dön" />
 
-                    {/* Kapak banner */}
+                    {/* Başlık */}
+                    <header className="bdetail-head">
+                        <p className="bdetail-tags">{post.tags.join(' · ')}</p>
+                        <h1 className="bdetail-title">{post.title}</h1>
+                        <p className="bdetail-source">{post.source} · {post.year}</p>
+                        <p className="bdetail-authors">{post.authors}</p>
+
+                        {/* Yazar + okuma süresi + makale bağlantısı */}
+                        <div className="bdetail-meta-row">
+                            <div className="bdetail-byline">
+                                <span className="bdetail-byline-name">Talha Kaya</span>
+                                {readingTime && (
+                                    <span className="bdetail-reading-time">· {readingTime} dk okuma</span>
+                                )}
+                            </div>
+                            <a href={post.url} target="_blank" rel="noopener noreferrer" className="bdetail-paper-link">
+                                Makaleyi Oku
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                    strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M7 17L17 7" /><path d="M7 7h10v10" />
+                                </svg>
+                            </a>
+                        </div>
+                    </header>
+
+                    {/* Kapak */}
                     <div className={`bdetail-cover ${post.color}`}>
                         {post.image && (
                             <img
@@ -475,72 +444,7 @@ const BlogPost = ({ id }: { id: string | undefined }) => {
                                 loading="eager"
                             />
                         )}
-                        <div className="bdetail-cover-content">
-                            <div className="bdetail-tags">
-                                {post.tags.map((t) => (
-                                    <span key={t} className="bdetail-tag">{t}</span>
-                                ))}
-                            </div>
-                        </div>
                     </div>
-
-                    {/* Başlık */}
-                    <div className="bdetail-head">
-                        <p className="bdetail-source">{post.source} · {post.year}</p>
-                        <h1 className="bdetail-title">{post.title}</h1>
-                        <p className="bdetail-authors">{post.authors}</p>
-
-                        {/* Yazar + okuma süresi + butonlar */}
-                        <div className="bdetail-meta-row">
-                            <div className="bdetail-byline">
-                                <span className="bdetail-byline-name">Talha Kaya</span>
-                                {readingTime && (
-                                    <span className="bdetail-reading-time">· {readingTime} dk okuma</span>
-                                )}
-                            </div>
-                            <div className="bdetail-actions">
-                                <button
-                                    className={`bdetail-action-btn btn-heart${liked ? ' active-heart' : ''}`}
-                                    onClick={toggleLike}
-                                    aria-label="Beğen"
-                                    title="Beğen"
-                                >
-                                    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                                    </svg>
-                                </button>
-                                <button
-                                    className={`bdetail-action-btn btn-star${starred ? ' active-star' : ''}`}
-                                    onClick={toggleStar}
-                                    aria-label="Kaydet"
-                                    title="Kaydet"
-                                >
-                                    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                                    </svg>
-                                </button>
-                                <button
-                                    className={`bdetail-action-btn btn-dislike${disliked ? ' active-dislike' : ''}`}
-                                    onClick={toggleDislike}
-                                    aria-label="Beğenme"
-                                    title="Beğenme"
-                                >
-                                    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                                        <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" />
-                                    </svg>
-                                </button>
-                                <a href={post.url} target="_blank" rel="noopener noreferrer" className="bdetail-paper-link">
-                                    Makaleyi Oku
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                                        strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M7 17L17 7" /><path d="M7 7h10v10" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr className="bdetail-divider" />
 
                     {/* Özet */}
                     <div className="bdetail-section">

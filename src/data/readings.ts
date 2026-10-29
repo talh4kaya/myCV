@@ -47,7 +47,7 @@ export const readings: Reading[] = [
         tags: ["Multi-Agent", "LLM", "Simülasyon", "Bellek"],
         color: "cover-blue",
         image: "/blog/generative-agents.png",
-        excerpt: "25 ajanın yaşadığı bir toplumda, her ajanın günlük hayatta yaptıklarını simüle ederek, gerçekçi insan davranışlarını analiz ediyor Bu makalede LLM'lerin insan davranışlarını ne kadar simüle edebileceğini inceliyor.",
+        excerpt: "25 ajanın yaşadığı bir toplumda, her ajanın günlük hayatta yaptıklarını simüle ederek, gerçekçi insan davranışlarını analiz ediyor. Bu makalede LLM'lerin insan davranışlarını ne kadar simüle edebileceğini inceliyor.",
         highlights: [
             "Ajanlar bellek akışı (memory stream) tutuyor, yaşanan her olay doğal dil olarak kaydediliyor.",
             "Reflection mekanizması: ajan belirli aralıklarla geçmişine bakıp üst düzey çıkarımlar yapıyor (örn. 'John'la iyi geçiniyorum').",

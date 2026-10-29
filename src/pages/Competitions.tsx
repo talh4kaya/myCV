@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import SiteHeader from '../components/sections/SiteHeader';
 import SiteFooter from '../components/sections/SiteFooter';
+import BackLink from '../components/BackLink';
 
 type Competition = {
     slug: string;
@@ -11,11 +11,16 @@ type Competition = {
     why: string;
     how: string;
     result: string;
+    /* sol sütunda öne çıkan derece; tier verilirse metalik parıltıyla yazılır */
+    rank: string;
+    tier?: 'gold' | 'silver';
 };
 
 const competitions: Competition[] = [
     {
         slug: 'teknofest',
+        rank: 'Finalist',
+        tier: 'gold',
         title: 'TEKNOFEST Finalisti',
         sub: 'Sağlıkta Yapay Zeka, Mutasyon Tahmini',
         what: 'Dört farklı hastalık paneli için DNA dizilerindeki tek nükleotid varyantlarını sınıflandıran makine öğrenmesi modelleri geliştirdik.',
@@ -25,6 +30,8 @@ const competitions: Competition[] = [
     },
     {
         slug: 'dataleague',
+        rank: 'Türkiye 2.',
+        tier: 'silver',
         title: 'Data League',
         sub: 'Üniversiteler Arası Data Yarışması',
         what: '5 milyondan fazla sosyal medya postunda koordineli bot ağlarını ve yapay gündem oluşturma faaliyetlerini tespit eden denetimsiz bir sistem geliştirdik.',
@@ -34,6 +41,8 @@ const competitions: Competition[] = [
     },
     {
         slug: 'gfast',
+        rank: 'İkincilik',
+        tier: 'silver',
         title: 'GFAST',
         sub: 'Girişimcilik Yarışması',
         what: 'Üretim makinelerinin arızasını önceden tahmin eden, sanayi odaklı bir kestirimci bakım sistemi tasarladık.',
@@ -43,6 +52,7 @@ const competitions: Competition[] = [
     },
     {
         slug: 'tubitak',
+        rank: 'Sunuldu',
         title: 'TÜBİTAK 2209-A',
         sub: 'Federe Öğrenme ile Veri Gizliliği',
         what: 'Veriyi merkezde toplamadan model eğitmeyi mümkün kılan, federe öğrenme (federated learning) temelli bir veri gizliliği projesi hazırlayıp sunduk.',
@@ -52,6 +62,8 @@ const competitions: Competition[] = [
     },
     {
         slug: 'hsd',
+        rank: 'İkincilik',
+        tier: 'silver',
         title: 'HSD Ideathon',
         sub: 'Fikir & Prototip Yarışması',
         what: 'Doğal afet koordinasyonunu iyileştirmeye yönelik bir yazılım fikri geliştirip çalışan bir prototipe dönüştürdük.',
@@ -61,6 +73,7 @@ const competitions: Competition[] = [
     },
     {
         slug: 'kaggle',
+        rank: 'Aktif',
         title: 'Kaggle',
         sub: 'Veri Bilimi Yarışmaları',
         what: "Farklı alanlarda gerçek dünya veri setleriyle çok sayıda yarışmaya katıldım ve aktif olarak katılmaya devam ediyorum.",
@@ -70,6 +83,7 @@ const competitions: Competition[] = [
     },
     {
         slug: 'btk',
+        rank: 'Katılım',
         title: 'BTK Akademi 2026 Hackathon',
         sub: 'AjanPazar × FitAI',
         what: 'Kullanıcının seçtiği ürünü kişiliğiyle uyumlu mu diye analiz eden, stil ve beden tavsiyesi veren, Gemini API destekli bir dolap/stil danışmanı web uygulaması geliştirdik.',
@@ -89,28 +103,47 @@ const Competitions = () => {
             <SiteHeader />
 
             <main>
-                <section className="comp-hero">
-                    <Link to="/" className="comp-hero-back">← Anasayfa</Link>
-                    <h1>Yarışmalarım</h1>
-                    <p className="comp-hero-sub">
-                        Üniversite hayatım boyunca katıldığım yapay zeka, veri bilimi ve yazılım geliştirme yarışmaları.
-                    </p>
+                <BackLink />
+
+                <section className="page-hero">
+                    <div className="page-hero-top">
+                        <div>
+                            <h1>Yarışmalarım.</h1>
+                            <p className="page-hero-sub">
+                                Üniversite hayatım boyunca katıldığım yapay zekâ, veri bilimi ve yazılım geliştirme yarışmaları.
+                            </p>
+                        </div>
+                        <img src="/icon-medal.png" alt="" className="page-hero-icon" />
+                    </div>
                 </section>
 
-                <section className="comp-rows">
-                    {competitions.map((c) => (
-                        <div className={`testimonial comp-row-${c.slug}`} key={c.slug}>
-                            <div className="exp-meta">
-                                <h3>{c.title}</h3>
-                                <p className="exp-sub">{c.sub}</p>
+                <section className="comp-list">
+                    {competitions.map((c, i) => (
+                        <article className="comp-entry" key={c.slug}>
+                            <div className="comp-entry-meta">
+                                <span className="comp-entry-index">{String(i + 1).padStart(2, '0')}</span>
+                                <h2>{c.title}</h2>
+                                <p className="comp-entry-sub">{c.sub}</p>
+                                <p className={`comp-entry-rank${c.tier ? ` tier tier-${c.tier}` : ''}`}>{c.rank}</p>
                             </div>
-                            <div className="testimonial-body comp-detail">
-                                <p><strong>Ne Yaptık:</strong> {c.what}</p>
-                                <p><strong>Neden Yaptık:</strong> {c.why}</p>
-                                <p><strong>Nasıl Yaptık:</strong> {c.how}</p>
-                                <p><strong>Sonuçlar:</strong> {c.result}</p>
+                            <div className="comp-entry-body">
+                                <p className="comp-entry-lead">{c.what}</p>
+                                <div className="comp-entry-notes">
+                                    <div>
+                                        <p className="comp-entry-label">Neden</p>
+                                        <p>{c.why}</p>
+                                    </div>
+                                    <div>
+                                        <p className="comp-entry-label">Nasıl</p>
+                                        <p>{c.how}</p>
+                                    </div>
+                                    <div className="comp-entry-result">
+                                        <p className="comp-entry-label">Sonuç</p>
+                                        <p>{c.result}</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </article>
                     ))}
                 </section>
             </main>

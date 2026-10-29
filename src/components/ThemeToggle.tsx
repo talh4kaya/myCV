@@ -13,9 +13,10 @@ const ThemeToggle = () => {
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
         try {
-            localStorage.setItem(STORAGE_KEY, theme);
+            // Kalıcı değil: site her yeni ziyarette koyu açılır (bkz. public/theme-init.js)
+            sessionStorage.setItem(STORAGE_KEY, theme);
         } catch {
-            // özel sekmede localStorage kapalı olabilir — tema yine de uygulanır
+            // depolama kapalı olabilir — tema yine de uygulanır
         }
     }, [theme]);
 

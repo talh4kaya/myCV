@@ -1,8 +1,21 @@
 import { createContext, useContext } from 'react';
 
+export type ThinkingStep = {
+    text: string;
+    // Modelin inceleyip elediği olasılık ("ruled out")
+    ruledOut: boolean;
+};
+
 export type ChatMessage = {
     role: 'bot' | 'user';
     content: string;
+    // Sadece Gemini'den gelen cevaplarda dolu
+    thinking?: {
+        steps: ThinkingStep[];
+        startedAt: number;
+        // Cevabın ilk parçası geldiği an dolar; o ana kadar "düşünüyor" gösterilir
+        durationMs?: number;
+    };
 };
 
 type ChatbotContextValue = {

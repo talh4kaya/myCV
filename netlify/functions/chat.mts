@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { SYSTEM_PROMPT } from "../lib/chatPrompt";
+import { ThinkingParser, type ChatEvent } from "../lib/thinkingParser";
 import { sanitizeInput } from "../../src/services/chatGuard";
 
 // Gemini anahtarı SADECE burada, sunucu tarafında okunur.
@@ -24,7 +25,7 @@ const startStream = async (message: string) => {
         contents: [{ role: "user", parts: [{ text: message }] }],
         config: {
           systemInstruction: SYSTEM_PROMPT,
-          maxOutputTokens: 1024,
+          maxOutputTokens: 1200,
           // 2.5 modellerinde "düşünme"yi kapatmak cevabı hızlandırır;
           // yeni modeller bu ayarı farklı yönetiyor, onlara gönderilmez.
           ...(model.startsWith("gemini-2.5") ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
@@ -115,17 +116,23 @@ export default async (req: Request, context: { ip?: string }) => {
   try {
     const result = await startStream(message.trim());
 
+    // Yanıt NDJSON: her satır bir olay — {"t":"step",...} düşünme adımı,
+    // {"t":"text",...} cevap parçası. İstemci adımları zaman çizelgesinde gösterir.
     const encoder = new TextEncoder();
+    const parser = new ThinkingParser();
     const stream = new ReadableStream<Uint8Array>({
       async start(controller) {
+        const send = (events: ChatEvent[]) => {
+          for (const event of events) controller.enqueue(encoder.encode(`${JSON.stringify(event)}\n`));
+        };
         try {
           for await (const chunk of result) {
-            const text = chunk.text;
-            if (text) controller.enqueue(encoder.encode(text));
+            if (chunk.text) send(parser.push(chunk.text));
           }
         } catch {
           // stream ortasında koparsa elimizdekiyle bitir
         } finally {
+          send(parser.flush());
           controller.close();
         }
       },
@@ -133,7 +140,7 @@ export default async (req: Request, context: { ip?: string }) => {
 
     return new Response(stream, {
       headers: {
-        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Type": "application/x-ndjson; charset=utf-8",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
       },

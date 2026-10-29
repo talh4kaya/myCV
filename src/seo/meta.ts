@@ -1,5 +1,4 @@
 import { readings } from '../data/readings';
-import { portfolioData } from '../data/portfolio';
 
 // Sitedeki her sayfanın başlık/açıklama/canonical bilgisi tek yerde.
 // Hem build sırasında (build/sitePlugin.ts her rota için ayrı HTML üretir,
@@ -156,28 +155,6 @@ const blogPostMeta = (r: (typeof readings)[number]): PageMeta => {
     };
 };
 
-const projectMeta = (p: (typeof portfolioData.projects)[number]): PageMeta => {
-    const path = `/project/${p.id}`;
-    const name = p.name.split('(')[0].trim();
-    return {
-        path,
-        title: `${name} | Talha Kaya Projeler`,
-        description: truncate(p.desc),
-        type: 'article',
-        jsonLd: [
-            {
-                '@context': 'https://schema.org',
-                '@type': 'CreativeWork',
-                name,
-                description: truncate(p.desc),
-                url: absoluteUrl(path),
-                keywords: p.tech.join(', '),
-                author: { '@id': PERSON_ID },
-            },
-        ],
-    };
-};
-
 export const NOT_FOUND: PageMeta = {
     path: '/404',
     title: 'Sayfa bulunamadı | Talha Kaya',
@@ -191,7 +168,6 @@ export const getAllPages = (): PageMeta[] => [
     COMPETITIONS,
     BLOG,
     ...readings.map(blogPostMeta),
-    ...portfolioData.projects.map(projectMeta),
 ];
 
 export const getPageMeta = (pathname: string): PageMeta => {

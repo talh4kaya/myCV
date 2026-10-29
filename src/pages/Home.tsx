@@ -4,10 +4,30 @@ import SiteHeader from '../components/sections/SiteHeader';
 import SiteFooter from '../components/sections/SiteFooter';
 import MakapakaCard from '../components/MakapakaCard';
 import ContactForm from '../components/sections/ContactForm';
+import SocialDock from '../components/SocialDock';
+import FileBoxIllustration from '../components/FileBoxIllustration';
 import { portfolioData } from '../data/portfolio';
+import { useChatbot } from '../components/useChatbot';
+
+// Özet içindeki Bronze / Silver / Gold katman adlarını kendi renginde gösterir
+const TIER_PATTERN = /(Bronze|Silver|Gold)/;
+const withTierColors = (text: string) =>
+    text.split(TIER_PATTERN).map((part, i) =>
+        TIER_PATTERN.test(part)
+            ? <span key={i} className={`tier tier-${part.toLowerCase()}`}>{part}</span>
+            : part,
+    );
 
 const Home = () => {
     const location = useLocation();
+    const { openFullscreen, sendMessage } = useChatbot();
+
+    // Bu projelerin herkese açık bir sayfası yok; "Daha fazla bilgi al"
+    // Makapaka'yı açıp projeyi detaylı anlatmasını ister.
+    const askAbout = (title: string) => {
+        openFullscreen();
+        sendMessage(`"${title}" projesini biraz daha detaylı anlatır mısın?`);
+    };
 
     // Başka sayfadan /#section ile geldiyse ilgili bölüme kaydır
     useEffect(() => {
@@ -25,7 +45,7 @@ const Home = () => {
         <>
             <SiteHeader />
 
-            <main>
+            <main className="home-main">
                 <section className="hero">
                     <div className="hero-title-wrap">
                         {/* {' '} — mobilde <br> gizlendiğinde kelimeler birleşmesin */}
@@ -42,17 +62,19 @@ const Home = () => {
                     <div className="hero-buttons">
                         <a
                             href="#contact"
-                            className="btn btn-primary"
+                            className="btn btn-secondary btn-orbit"
                             onClick={(e) => {
                                 e.preventDefault();
                                 document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
                             }}
                         >
-                            İletişime Geç <span className="arrow">↗</span>
+                            <span className="orbit-ring" aria-hidden="true"><span className="orbit-spin" /></span>
+                            <span className="orbit-fill" aria-hidden="true" />
+                            <span className="orbit-label">İletişime Geç <span className="arrow">↗</span></span>
                         </a>
                         <a
                             href="#projects"
-                            className="btn btn-secondary"
+                            className="btn btn-primary"
                             onClick={(e) => {
                                 e.preventDefault();
                                 document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
@@ -66,10 +88,10 @@ const Home = () => {
                 <section className="project-grid" id="projects">
                     <article className="project-card">
                         <Link to="/yarismalarim" className="project-thumb project-thumb-comp">
-                            <img src="/cartoon-podium.svg" alt="" className="card-corner-icon" />
+                            <img src="/icon-target.png" alt="" className="card-corner-icon" />
                             <div className="comp-preview-list">
                                 <div className="comp-preview-row">
-                                    <img src="/icons/teknofest-logo.png" alt="" className="comp-preview-logo" />
+                                    <img src="/icons/comp/teknofest.png" alt="" className="comp-preview-logo" />
                                     <div className="comp-preview-text">
                                         <span className="comp-preview-name">TEKNOFEST</span>
                                         <span className="comp-preview-desc">Sağlıkta Yapay Zeka</span>
@@ -77,7 +99,7 @@ const Home = () => {
                                     <span className="comp-preview-result">Finalist</span>
                                 </div>
                                 <div className="comp-preview-row">
-                                    <img src="/icons/dataleague-logo.png" alt="" className="comp-preview-logo" />
+                                    <img src="/icons/comp/dataleague.png" alt="" className="comp-preview-logo" />
                                     <div className="comp-preview-text">
                                         <span className="comp-preview-name">Data League</span>
                                         <span className="comp-preview-desc">Bot Ağı Tespiti</span>
@@ -85,7 +107,7 @@ const Home = () => {
                                     <span className="comp-preview-result">Türkiye 2.</span>
                                 </div>
                                 <div className="comp-preview-row">
-                                    <img src="/icons/gfast-logo.png" alt="" className="comp-preview-logo" />
+                                    <img src="/icons/comp/gfast.png" alt="" className="comp-preview-logo is-mono" />
                                     <div className="comp-preview-text">
                                         <span className="comp-preview-name">GFAST</span>
                                         <span className="comp-preview-desc">Kestirimci Bakım</span>
@@ -93,7 +115,7 @@ const Home = () => {
                                     <span className="comp-preview-result">2.</span>
                                 </div>
                                 <div className="comp-preview-row">
-                                    <img src="/icons/hsd-ideathon-logo.png" alt="" className="comp-preview-logo" />
+                                    <img src="/icons/comp/hsd.png" alt="" className="comp-preview-logo is-mono" />
                                     <div className="comp-preview-text">
                                         <span className="comp-preview-name">HSD Ideathon</span>
                                         <span className="comp-preview-desc">Afet Koordinasyonu</span>
@@ -101,7 +123,7 @@ const Home = () => {
                                     <span className="comp-preview-result">2.</span>
                                 </div>
                                 <div className="comp-preview-row">
-                                    <img src="/icons/kaggle-logo.png" alt="" className="comp-preview-logo" />
+                                    <img src="/icons/comp/kaggle.png" alt="" className="comp-preview-logo" />
                                     <div className="comp-preview-text">
                                         <span className="comp-preview-name">Kaggle</span>
                                         <span className="comp-preview-desc">Veri Bilimi Yarışmaları</span>
@@ -122,7 +144,7 @@ const Home = () => {
 
                     <article className="project-card">
                         <div className="project-thumb thumb-3 project-thumb-split">
-                            <img src="/abacus-toy.svg" alt="" className="card-corner-icon" />
+                            <img src="/icon-papers.png" alt="" className="card-corner-icon" />
                             <div className="split-block">
                                 <div className="split-head">
                                     <h4>Mangala AI</h4>
@@ -154,7 +176,7 @@ const Home = () => {
 
                     <article className="project-card">
                         <div className="project-thumb thumb-2 project-thumb-split">
-                            <img src="/cartoon-notebook-cluttered.svg" alt="" className="card-corner-icon" />
+                            <img src="/icon-notebook.png" alt="" className="card-corner-icon" />
                             <div className="split-block">
                                 <div className="split-head">
                                     <h4>DPolitic</h4>
@@ -186,28 +208,55 @@ const Home = () => {
                     </article>
                 </section>
 
-                <section className="clients" id="all-projects">
-                    <p className="section-label">Tüm Projelerim</p>
+                <section className="work" id="all-projects">
+                    <div className="work-head">
+                        <div>
+                            <h2 className="work-title">Aktif kullanılan projelerim.</h2>
+                            <p className="work-sub">
+                                Şirketlerin dijital dönüşüm sürecinde geliştirdiğim ve halen aktif kullanılan projeler.
+                            </p>
+                        </div>
+                        <FileBoxIllustration className="work-illustration" />
+                    </div>
 
-                    {portfolioData.projects.map((project) => {
-                        const [name, sub] = project.name.split('(');
-                        return (
-                            <div className="testimonial" key={project.id}>
-                                <div className="exp-meta">
-                                    <h3>{name.trim()}</h3>
-                                    <p className="exp-sub">{sub ? sub.replace(')', '') : project.tech.join(' · ')}</p>
+                    <div className="work-grid">
+                        {portfolioData.featuredWork.map((work) => (
+                            <article className="work-card" key={work.id}>
+                                <div className="work-top">
+                                    <p className="work-org">{work.org}</p>
+                                    <h3 className="work-name">{work.title}</h3>
+                                    <p className="work-punch">{work.punch}</p>
                                 </div>
-                                <div className="testimonial-body comp-detail">
-                                    <p>{project.desc}</p>
-                                    <p>
-                                        <Link to={`/project/${project.id}`} className="link-arrow">
-                                            Detaylar →
-                                        </Link>
-                                    </p>
+                                <p className="work-summary">{withTierColors(work.summary)}</p>
+                                <div className="work-tech">
+                                    <p className="work-tech-label">Teknolojiler</p>
+                                    <div className="split-tags">
+                                        {work.tech.map((t) => <span key={t}>{t}</span>)}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="work-more"
+                                        onClick={() => askAbout(work.title)}
+                                        aria-label={`${work.title} hakkında daha fazla bilgi al`}
+                                        title="Daha fazla bilgi al"
+                                    >
+                                        →
+                                    </button>
                                 </div>
-                            </div>
-                        );
-                    })}
+                            </article>
+                        ))}
+                    </div>
+
+                    <p className="work-older">
+                        <span>Önceki projeler:</span>
+                        {portfolioData.projects
+                            .filter((project) => project.github)
+                            .map((project) => (
+                                <a key={project.id} href={project.github} target="_blank" rel="noopener noreferrer">
+                                    {project.name.split('(')[0].trim()} ↗
+                                </a>
+                            ))}
+                    </p>
                 </section>
 
                 <section className="clients" id="competitions">
@@ -241,6 +290,21 @@ const Home = () => {
 
                 <section className="clients" id="experience">
                     <p className="section-label">Deneyimlerim</p>
+
+                    <div className="testimonial">
+                        <div className="exp-meta">
+                            <h3>Yapay Zekâ ve Veri Mühendisliği</h3>
+                            <p className="exp-sub">İhlas Holding A.Ş. (2026 – devam ediyor)</p>
+                        </div>
+                        <div className="testimonial-body">
+                            <p className="quote">
+                                "Uygulamalı Mühendislik Eğitimi kapsamında holdingin uçtan uca veri, yetki ve yapay zekâ
+                                platformunu kuruyorum. İştiraklerin verisini katmanlı bir lakehouse'ta topladım; satır, kolon ve
+                                belge düzeyinde merkezî yetkilendirmeyi kurdum. Üstüne, kullanıcının kendi yetkisiyle çalışan;
+                                MCP araçları, RAG ve A2A agent'larından oluşan kurumsal yapay zekâ katmanını geliştirdim."
+                            </p>
+                        </div>
+                    </div>
 
                     <div className="testimonial">
                         <div className="exp-meta">
@@ -284,47 +348,7 @@ const Home = () => {
                             ve sürdürülebilir çözümler üretmeye odaklanıyorum.
                         </p>
 
-                        <div className="about-social-row">
-                            <a
-                                href="https://www.linkedin.com/in/talha-kaya-aa5255340"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="LinkedIn"
-                                className="about-social-item"
-                            >
-                                <img src="/icons/linkedin.png" alt="LinkedIn" />
-                            </a>
-                            <a href="mailto:talh4kaya@gmail.com" title="E-posta" className="about-social-item">
-                                <img src="/icons/communication.png" alt="E-posta" />
-                            </a>
-                            <a
-                                href="https://github.com/talh4kaya"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="GitHub"
-                                className="about-social-item"
-                            >
-                                <img src="/icons/github-sign.png" alt="GitHub" />
-                            </a>
-                            <a
-                                href="https://huggingface.co/talh4kaya"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="Hugging Face"
-                                className="about-social-item"
-                            >
-                                <img src="/icons/huggingface-icon.png" alt="Hugging Face" />
-                            </a>
-                            <a
-                                href="https://www.kaggle.com/talh4kaya"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title="Kaggle"
-                                className="about-social-item"
-                            >
-                                <img src="/icons/kaggle-logo.png" alt="Kaggle" />
-                            </a>
-                        </div>
+                        <SocialDock />
                     </div>
 
                     <ContactForm />
