@@ -165,6 +165,11 @@ select {
 }
 
 /* Header */
+/* Menüden bir bölüme gidilince başlık yapışkan menünün altında kalmasın */
+section[id] {
+  scroll-margin-top: 88px;
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -323,6 +328,18 @@ select {
   padding: 195px var(--gutter) 60px;
 }
 
+/* İmleç tozu (CursorTrail.tsx): ekranı kaplar, tıklamayı engellemez.
+   z-index -1 ile sayfa zemininin hemen üstünde, tüm yazı ve kartların
+   arkasında kalır (zemin rengi body'den köke taşındığı için görünür). */
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 .hero h1 {
   font-size: 36px;
   font-weight: 700;
@@ -472,13 +489,15 @@ select {
   align-items: stretch;
   justify-content: flex-start;
   padding: 26px;
-  gap: 16px;
+  /* iki proje arasında nefes payı */
+  gap: 26px;
 }
 
+/* yarışma kartındaki "Katıldığım Yarışmalar" ile aynı boyutta */
 .split-title {
   margin-top: auto;
   padding-top: 6px;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--card-text);
@@ -488,7 +507,7 @@ select {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 4px 8px;
 }
 
 .split-block h4 {
@@ -506,7 +525,7 @@ select {
 }
 
 .split-desc {
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 15px;
   font-weight: 400;
   letter-spacing: normal;
@@ -515,7 +534,7 @@ select {
 }
 
 .split-tags {
-  margin-top: 8px;
+  margin-top: 12px;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -536,8 +555,8 @@ select {
 
 /* Project card — competitions preview */
 .project-thumb-comp {
-  /* köşedeki hedef tahtası ikonu (16px + 56px) ile ilk satır arasında boşluk */
-  padding-top: 84px;
+  /* köşedeki hedef tahtası ikonu (18px + 46px) ile ilk satır arasında boşluk */
+  padding-top: 68px;
   background: var(--panel);
   flex-direction: column;
   justify-content: space-between;
@@ -548,7 +567,9 @@ select {
 
 /* Yalnızca bu kartta ikon biraz aşağıda: listeye yaklaşır, liste yerinde kalır */
 .project-thumb-comp .card-corner-icon {
-  top: 24px;
+  top: 18px;
+  width: 46px;
+  height: 46px;
 }
 
 .project-thumb-comp>*:not(.card-corner-icon) {
@@ -560,11 +581,12 @@ select {
   opacity: 0.92;
 }
 
+/* liste ortalanmaz, ikonun hemen altından başlar */
 .comp-preview-list {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px;
 }
 
@@ -613,6 +635,7 @@ select {
 }
 
 .comp-card-footer {
+  margin-top: 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -811,7 +834,7 @@ input.phone-input-field::placeholder {
 
 .section-label {
   color: var(--text-dim);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: -0.04em;
   margin-bottom: 24px;
@@ -2995,10 +3018,10 @@ input.phone-input-field::placeholder {
    yalnızca daha dar ekranlarda devreye girer.
    ══════════════════════════════════════════════════════════════════ */
 
-/* Laptop genişliğinde ana sayfa 1.08 büyütüldüğü için sabit oranlı kartlar
-   içeriği sığdıramıyor (yarışma listesi alttaki karta taşıyordu): kartlar
-   içeriğe göre uzasın. */
-@media (min-width: 1201px) and (max-width: 1700px) {
+/* Ana sayfa 1.08 büyütüldüğü için sabit oranlı kartlar içeriği her genişlikte
+   sığdıramıyordu (yarışma listesi ve proje açıklamaları kesiliyordu):
+   kartlar içeriğe göre uzasın. */
+@media (min-width: 1201px) {
   .project-card {
     display: flex;
   }
@@ -3217,8 +3240,8 @@ input.phone-input-field::placeholder {
 
   .project-thumb-split {
     min-height: 0;
-    padding: 22px 20px;
-    gap: 12px;
+    padding: 22px 20px 24px;
+    gap: 28px;
   }
 
   .thumb-2.project-thumb-split,
@@ -3236,14 +3259,14 @@ input.phone-input-field::placeholder {
   }
 
   .split-desc {
-    margin-top: 4px;
-    font-size: 14px;
-    line-height: 1.4;
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.5;
   }
 
   .split-tags {
-    margin-top: 6px;
-    gap: 10px;
+    margin-top: 12px;
+    gap: 6px 12px;
   }
 
   .split-tags span {
@@ -3251,7 +3274,8 @@ input.phone-input-field::placeholder {
   }
 
   .split-title {
-    font-size: 15px;
+    padding-top: 0;
+    font-size: 16px;
   }
 
   .comp-preview-list {
@@ -3548,7 +3572,7 @@ input.phone-input-field::placeholder {
 /* Başlık bloğu yüksekliğinde, son kartın üstünde sağa yaslı */
 .work-illustration {
   flex: none;
-  width: 150px;
+  width: 120px;
   height: auto;
   margin-bottom: -6px;
   color: var(--text);

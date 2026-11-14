@@ -40,7 +40,7 @@ const SiteHeader = () => {
                     </div>
                     <div className={`nav-col${menuOpen ? ' open' : ''}`}>
                         <nav className="main-nav">
-                            <a href="#projects" onClick={(e) => goToSection(e, 'projects')}>Projeler</a>
+                            <a href="#all-projects" onClick={(e) => goToSection(e, 'all-projects')}>Projeler</a>
                             <Link to="/yarismalarim" onClick={() => setMenuOpen(false)}>Yarışmalar</Link>
                             <Link to="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
                             <button

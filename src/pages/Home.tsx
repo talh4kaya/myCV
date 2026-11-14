@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SiteHeader from '../components/sections/SiteHeader';
 import SiteFooter from '../components/sections/SiteFooter';
@@ -6,6 +6,7 @@ import MakapakaCard from '../components/MakapakaCard';
 import ContactForm from '../components/sections/ContactForm';
 import SocialDock from '../components/SocialDock';
 import FileBoxIllustration from '../components/FileBoxIllustration';
+import CursorTrail from '../components/CursorTrail';
 import { portfolioData } from '../data/portfolio';
 import { useChatbot } from '../components/useChatbot';
 
@@ -21,6 +22,7 @@ const withTierColors = (text: string) =>
 const Home = () => {
     const location = useLocation();
     const { openFullscreen, sendMessage } = useChatbot();
+    const heroRef = useRef<HTMLElement>(null);
 
     // Bu projelerin herkese açık bir sayfası yok; "Daha fazla bilgi al"
     // Makapaka'yı açıp projeyi detaylı anlatmasını ister.
@@ -45,8 +47,11 @@ const Home = () => {
         <>
             <SiteHeader />
 
+            {/* main'deki büyütmenin (zoom) dışında: imleç koordinatları birebir eşleşsin */}
+            <CursorTrail targetRef={heroRef} />
+
             <main className="home-main">
-                <section className="hero">
+                <section className="hero" ref={heroRef}>
                     <div className="hero-title-wrap">
                         {/* {' '} — mobilde <br> gizlendiğinde kelimeler birleşmesin */}
                         <h1>
