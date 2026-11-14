@@ -3935,19 +3935,29 @@ input.phone-input-field::placeholder {
 }
 
 /* ── Telefon: kart hizası ve yazı ölçeği ──
-   Bütün kartlar sayfanın kenar boşluğuyla (20px) aynı hizada durur ve içleri
-   aynı 24px boşlukla başlar. Yazılar tek bir ölçeğe bağlı:
+   Bütün kartlar ekranın iki kenarına dayanır, içleri aynı 24px boşlukla
+   başlar; bölümleri ayıran çizgiler de kenardan kenara uzanır. Yazılar tek bir ölçeğe bağlı:
    bölüm başlığı 30 · kart başlığı 22 · büyük metin 18 · kart metni 16 ·
    alt bilgi 13 · etiket 12. Büyük metinlerde satır arası açık tutulur. */
 @media (max-width: 800px) {
   /* alt alta gelen kartlar birbirine yapışmasın */
   .project-grid {
-    padding: 0 var(--gutter);
+    padding: 0;
     gap: 28px;
   }
 
   .work-grid {
     row-gap: 28px;
+    margin-left: calc(-1 * var(--gutter));
+    margin-right: calc(-1 * var(--gutter));
+  }
+
+  /* çizgi ekranın iki ucuna uzanır, yazı yine kenar boşluğundan başlar */
+  .testimonial {
+    margin-left: calc(-1 * var(--gutter));
+    margin-right: calc(-1 * var(--gutter));
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
   }
 
   .project-thumb-comp {
