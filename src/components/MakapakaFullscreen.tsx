@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useChatbot } from './useChatbot';
 import { MAX_MESSAGE_LENGTH } from '../services/chatGuard';
 import ThinkingSteps from './ThinkingSteps';
+import PredictiveInput from './PredictiveInput';
 
 const MakapakaFullscreen = () => {
     const { messages, isTyping, sendMessage, isFullscreenOpen, closeFullscreen } = useChatbot();
@@ -74,21 +75,13 @@ const MakapakaFullscreen = () => {
                 </div>
 
                 <div className="fs-input-box">
-                    <input
+                    <PredictiveInput
                         className="fs-input"
-                        ref={inputRef}
-                        type="text"
-                        placeholder="Bir şey sor..."
-                        autoComplete="off"
+                        inputRef={inputRef}
                         maxLength={MAX_MESSAGE_LENGTH}
                         value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                e.preventDefault();
-                                handleSend();
-                            }
-                        }}
+                        onChange={setInput}
+                        onSubmit={handleSend}
                     />
                     <button
                         type="button"

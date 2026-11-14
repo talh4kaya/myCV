@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useChatbot } from './useChatbot';
 import { MAX_MESSAGE_LENGTH } from '../services/chatGuard';
 import ThinkingSteps from './ThinkingSteps';
+import PredictiveInput from './PredictiveInput';
 
 /**
  * v4 tasarımındaki "telefon ekranı" chatbot kartı.
@@ -47,20 +48,12 @@ const MakapakaCard = () => {
 
                 <div className="phone-bottom-bar">
                     <div className="phone-input-box">
-                        <input
-                            type="text"
+                        <PredictiveInput
                             className="phone-input-field"
-                            placeholder="Bir şey sor..."
-                            autoComplete="off"
                             maxLength={MAX_MESSAGE_LENGTH}
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    e.preventDefault();
-                                    handleSend();
-                                }
-                            }}
+                            onChange={setInput}
+                            onSubmit={handleSend}
                         />
                         <button
                             type="button"

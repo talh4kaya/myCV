@@ -1545,6 +1545,29 @@ input.phone-input-field::placeholder {
   border-top: 1px solid var(--chat-border);
 }
 
+/* Kelime tahmini (PredictiveInput.tsx): giriş kutusunun tam üstünde duran
+   saydam kopya; yalnızca öneri kısmı soluk renkte görünür */
+.phone-input-box,
+.fs-input-box {
+  position: relative;
+}
+
+.predict-mirror {
+  position: absolute;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+  pointer-events: none;
+  color: transparent;
+}
+
+.predict-ghost {
+  color: var(--chat-muted);
+  opacity: 0.75;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 .fs-input {
   flex: 1;
   min-width: 0;
@@ -3889,29 +3912,33 @@ input.phone-input-field::placeholder {
   left: 50%;
   width: 260%;
   aspect-ratio: 1;
-  /* Saat yönünde dönen iki şerit: arkada kalan kuyruk beyaz, sonra mor,
-     açık mavi ve en önde mavi */
+  /* Referanstaki gibi sade: şerit koyu griden açık griye, oradan yumuşak bir
+     beyaz parlamaya geçer; renk yalnızca uçta küçük bir vurgu olarak kalır
+     (bir şeritte mor, diğerinde açık mavi-mavi). */
   background: conic-gradient(
     var(--btn-secondary-bg) 0deg,
-    var(--orbit-tail) 14deg,
-    var(--orbit-c) 40deg,
-    var(--orbit-b) 75deg,
-    var(--orbit-a) 108deg,
-    var(--btn-secondary-bg) 135deg,
+    var(--orbit-gray-1) 22deg,
+    var(--orbit-gray-2) 44deg,
+    var(--orbit-tail) 60deg,
+    var(--orbit-warm-1) 74deg,
+    var(--orbit-warm-2) 88deg,
+    var(--btn-secondary-bg) 112deg,
     var(--btn-secondary-bg) 180deg,
-    var(--orbit-tail) 194deg,
-    var(--orbit-c) 220deg,
-    var(--orbit-b) 255deg,
-    var(--orbit-a) 288deg,
-    var(--btn-secondary-bg) 315deg
+    var(--orbit-gray-1) 202deg,
+    var(--orbit-gray-2) 224deg,
+    var(--orbit-tail) 240deg,
+    var(--orbit-cool-1) 254deg,
+    var(--orbit-cool-2) 268deg,
+    var(--btn-secondary-bg) 292deg
   );
+  opacity: 0.85;
   transform: translate(-50%, -50%);
   animation: orbit-spin 4s linear infinite;
 }
 
 .orbit-fill {
   position: absolute;
-  inset: 1.5px;
+  inset: 1px;
   border-radius: inherit;
   background: var(--btn-secondary-bg);
   pointer-events: none;
@@ -3924,17 +3951,22 @@ input.phone-input-field::placeholder {
   gap: 6px;
 }
 
-/* mavi tonları ve mor (açık mavi proje kartlarındaki mavi), kuyruk beyaz.
+/* Gri-beyaz şeritlerin ucunda mor ve mavi vurgu.
    Açık temada beyaz kuyruk zeminde kaybolmasın diye çok açık maviye döner. */
 .btn-orbit {
-  --orbit-tail: #ffffff;
-  --orbit-a: #5a95ff;
-  --orbit-b: #6cb8ff;
-  --orbit-c: #9b6bff;
+  --orbit-gray-1: #2c2c31;
+  --orbit-gray-2: #77777e;
+  --orbit-tail: #ececee;
+  --orbit-warm-1: #b49cff;
+  --orbit-warm-2: #7c5cff;
+  --orbit-cool-1: #8fb4ff;
+  --orbit-cool-2: #1f63f0;
 }
 
 :root[data-theme="light"] .btn-orbit {
-  --orbit-tail: #b9dcff;
+  --orbit-gray-1: #d2d2d6;
+  --orbit-gray-2: #a3a3aa;
+  --orbit-tail: #6b6b72;
 }
 
 @keyframes orbit-spin {
