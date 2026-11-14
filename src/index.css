@@ -3960,13 +3960,56 @@ input.phone-input-field::placeholder {
     padding-right: var(--gutter);
   }
 
+  /* Üstteki dört kartın içi, alttaki proje kartlarıyla aynı ritimde:
+     iki yandan 24px, üstte ve altta bol boşluk, satırlar arası açık */
   .project-thumb-comp {
-    padding: 72px 24px 24px;
+    padding: 76px 24px 32px;
+  }
+
+  .project-thumb-comp .comp-preview-list {
+    gap: 16px;
+  }
+
+  .project-thumb-comp .comp-card-footer {
+    margin-top: 26px;
+    padding-top: 0;
   }
 
   .thumb-2.project-thumb-split,
   .thumb-3.project-thumb-split {
-    padding: 52px 24px 28px;
+    padding: 60px 24px 36px;
+    gap: 44px;
+  }
+
+  .split-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .split-desc {
+    margin-top: 16px;
+  }
+
+  .split-tags {
+    margin-top: 18px;
+  }
+
+  .split-title {
+    margin-top: 4px;
+  }
+
+  .mobile-phone-screen {
+    padding: 28px 24px 0;
+  }
+
+  .phone-bottom-bar {
+    margin-left: -24px;
+    margin-right: -24px;
+  }
+
+  .phone-input-box {
+    padding: 16px 24px;
   }
 
   .work-card {
