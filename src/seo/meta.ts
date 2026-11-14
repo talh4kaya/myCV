@@ -80,7 +80,7 @@ const breadcrumb = (items: { name: string; path: string }[]) => ({
 
 const HOME: PageMeta = {
     path: '/',
-    title: 'Talha Kaya | Data Scientist & Machine Learning Engineer',
+    title: 'Talha Kaya',
     description:
         'Talha Kaya — Sakarya Üniversitesi Bilgisayar Mühendisliği öğrencisi, Data Scientist ve ML Engineer. TEKNOFEST finalisti; Computer Vision, LLM ve RAG projeleri.',
     type: 'profile',
