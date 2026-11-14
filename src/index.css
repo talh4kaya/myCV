@@ -3933,3 +3933,113 @@ input.phone-input-field::placeholder {
     animation: none;
   }
 }
+
+/* ── Telefon: kart hizası ve yazı ölçeği ──
+   Bütün kartlar sayfanın kenar boşluğuyla (20px) aynı hizada durur ve içleri
+   aynı 24px boşlukla başlar. Yazılar tek bir ölçeğe bağlı:
+   bölüm başlığı 30 · kart başlığı 22 · büyük metin 18 · kart metni 16 ·
+   alt bilgi 13 · etiket 12. Büyük metinlerde satır arası açık tutulur. */
+@media (max-width: 800px) {
+  /* alt alta gelen kartlar birbirine yapışmasın */
+  .project-grid {
+    padding: 0 var(--gutter);
+    gap: 28px;
+  }
+
+  .work-grid {
+    row-gap: 28px;
+  }
+
+  .project-thumb-comp {
+    padding: 72px 24px 24px;
+  }
+
+  .thumb-2.project-thumb-split,
+  .thumb-3.project-thumb-split {
+    padding: 52px 24px 28px;
+  }
+
+  .work-card {
+    padding: 28px 24px 56px;
+  }
+
+  .work-title,
+  .page-hero h1 {
+    font-size: 30px;
+  }
+
+  .split-block h4,
+  .testimonial h3,
+  .work-name {
+    font-size: 22px;
+    line-height: 1.1;
+  }
+
+  .testimonial-body p.quote,
+  .about-text>p {
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: -0.025em;
+  }
+
+  .split-desc,
+  .work-summary {
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  .split-sub,
+  .exp-sub,
+  .work-org,
+  .comp-preview-desc {
+    font-size: 13px;
+  }
+
+  .work-punch {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .testimonial {
+    gap: 14px;
+  }
+
+  /* Aynı görevdeki yazılar aynı kalınlık ve harf aralığında. Küçük yazılarda
+     sıkı harf aralığı harfleri birbirine yapıştırıyordu: hafif açıldı. */
+  .split-block h4,
+  .testimonial h3,
+  .work-name {
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+
+  .split-desc,
+  .work-summary {
+    font-weight: 500;
+  }
+
+  .split-sub,
+  .exp-sub,
+  .work-org,
+  .comp-preview-desc {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .work-punch,
+  .comp-preview-result,
+  .work-older a,
+  .split-tags span,
+  .work-tech-label,
+  .section-label {
+    letter-spacing: -0.01em;
+  }
+
+  .comp-preview-name,
+  .project-caption,
+  .split-title,
+  .slots {
+    letter-spacing: -0.025em;
+  }
+}
