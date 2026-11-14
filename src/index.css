@@ -3889,17 +3889,20 @@ input.phone-input-field::placeholder {
   left: 50%;
   width: 260%;
   aspect-ratio: 1;
-  /* ağırlıklı mavi (proje kartlarındaki açık mavi), ucunda küçük beyaz parlama */
+  /* Saat yönünde dönen iki şerit: arkada kalan kuyruk beyaz, sonra mor,
+     açık mavi ve en önde mavi */
   background: conic-gradient(
     var(--btn-secondary-bg) 0deg,
-    var(--orbit-a) 20deg,
-    var(--orbit-a) 95deg,
-    var(--orbit-b) 112deg,
+    var(--orbit-tail) 14deg,
+    var(--orbit-c) 40deg,
+    var(--orbit-b) 75deg,
+    var(--orbit-a) 108deg,
     var(--btn-secondary-bg) 135deg,
     var(--btn-secondary-bg) 180deg,
-    var(--orbit-a) 200deg,
-    var(--orbit-a) 275deg,
-    var(--orbit-b) 292deg,
+    var(--orbit-tail) 194deg,
+    var(--orbit-c) 220deg,
+    var(--orbit-b) 255deg,
+    var(--orbit-a) 288deg,
     var(--btn-secondary-bg) 315deg
   );
   transform: translate(-50%, -50%);
@@ -3921,14 +3924,17 @@ input.phone-input-field::placeholder {
   gap: 6px;
 }
 
-/* açık temada beyaz, zeminde kaybolmasın diye koyu maviye döner */
+/* mavi tonları ve mor (açık mavi proje kartlarındaki mavi), kuyruk beyaz.
+   Açık temada beyaz kuyruk zeminde kaybolmasın diye çok açık maviye döner. */
 .btn-orbit {
-  --orbit-a: #6cb8ff;
-  --orbit-b: #ffffff;
+  --orbit-tail: #ffffff;
+  --orbit-a: #5a95ff;
+  --orbit-b: #6cb8ff;
+  --orbit-c: #9b6bff;
 }
 
 :root[data-theme="light"] .btn-orbit {
-  --orbit-b: #1f86d1;
+  --orbit-tail: #b9dcff;
 }
 
 @keyframes orbit-spin {
