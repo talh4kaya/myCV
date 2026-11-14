@@ -489,15 +489,13 @@ section[id] {
   align-items: stretch;
   justify-content: flex-start;
   padding: 26px;
-  /* iki proje arasında nefes payı */
-  gap: 26px;
+  gap: 16px;
 }
 
-/* yarışma kartındaki "Katıldığım Yarışmalar" ile aynı boyutta */
 .split-title {
   margin-top: auto;
   padding-top: 6px;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--card-text);
@@ -507,7 +505,7 @@ section[id] {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 4px 8px;
+  gap: 8px;
 }
 
 .split-block h4 {
@@ -525,7 +523,7 @@ section[id] {
 }
 
 .split-desc {
-  margin-top: 8px;
+  margin-top: 6px;
   font-size: 15px;
   font-weight: 400;
   letter-spacing: normal;
@@ -534,7 +532,7 @@ section[id] {
 }
 
 .split-tags {
-  margin-top: 12px;
+  margin-top: 8px;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -834,7 +832,7 @@ input.phone-input-field::placeholder {
 
 .section-label {
   color: var(--text-dim);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: -0.04em;
   margin-bottom: 24px;
@@ -3018,22 +3016,19 @@ input.phone-input-field::placeholder {
    yalnızca daha dar ekranlarda devreye girer.
    ══════════════════════════════════════════════════════════════════ */
 
-/* Ana sayfa 1.08 büyütüldüğü için sabit oranlı kartlar içeriği her genişlikte
-   sığdıramıyordu (yarışma listesi ve proje açıklamaları kesiliyordu):
-   kartlar içeriğe göre uzasın. */
+/* Kartlar tasarımdaki 706:482 oranını korur; içerik bu yüksekliğe sığmazsa
+   (ana sayfa 1.08 büyütüldüğü için bazı genişliklerde oluyor) kesilmek
+   yerine uzar. Oran, kartın kendi genişliğinden (cqw) hesaplanır. */
 @media (min-width: 1201px) {
   .project-card {
     display: flex;
+    container-type: inline-size;
   }
 
   .project-thumb {
     flex: 1;
     aspect-ratio: auto;
-    min-height: 400px;
-  }
-
-  .project-thumb-chat {
-    min-height: 440px;
+    min-height: calc(100cqw * 482 / 706);
   }
 }
 
@@ -3894,15 +3889,18 @@ input.phone-input-field::placeholder {
   left: 50%;
   width: 260%;
   aspect-ratio: 1;
+  /* ağırlıklı mavi (proje kartlarındaki açık mavi), ucunda küçük beyaz parlama */
   background: conic-gradient(
     var(--btn-secondary-bg) 0deg,
-    #ff5a1f 40deg,
-    #ffd23f 70deg,
-    var(--btn-secondary-bg) 110deg,
+    var(--orbit-a) 20deg,
+    var(--orbit-a) 95deg,
+    var(--orbit-b) 112deg,
+    var(--btn-secondary-bg) 135deg,
     var(--btn-secondary-bg) 180deg,
-    #3d7eff 220deg,
-    #b76bff 250deg,
-    var(--btn-secondary-bg) 290deg
+    var(--orbit-a) 200deg,
+    var(--orbit-a) 275deg,
+    var(--orbit-b) 292deg,
+    var(--btn-secondary-bg) 315deg
   );
   transform: translate(-50%, -50%);
   animation: orbit-spin 4s linear infinite;
@@ -3921,6 +3919,16 @@ input.phone-input-field::placeholder {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+/* açık temada beyaz, zeminde kaybolmasın diye koyu maviye döner */
+.btn-orbit {
+  --orbit-a: #6cb8ff;
+  --orbit-b: #ffffff;
+}
+
+:root[data-theme="light"] .btn-orbit {
+  --orbit-b: #1f86d1;
 }
 
 @keyframes orbit-spin {
@@ -4120,5 +4128,9 @@ input.phone-input-field::placeholder {
     grid-column: 2;
     grid-row: 1 / span 2;
     text-align: right;
+  }
+
+  .section-label {
+    font-size: 12px;
   }
 }
