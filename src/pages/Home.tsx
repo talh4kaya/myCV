@@ -56,9 +56,11 @@ const Home = () => {
                         {/* {' '} — mobilde <br> gizlendiğinde kelimeler birleşmesin */}
                         <h1>
                             I'm Talha Kaya, Data Scientist and{' '}<br />
-                            Machine Learning Engineer. I work{' '}<br />
-                            across tabular data, computer vision,{' '}<br />
-                            LLMs, and RAG, and automate all of it.
+                            Machine Learning Engineer.{' '}
+                            <span className="h1-dim">I work{' '}<br />
+                            directly with data, from raw tables to vision,{' '}<br />
+                            LLMs, and RAG, and</span>{' '}
+                            automate all of it.
                         </h1>
                     </div>
 

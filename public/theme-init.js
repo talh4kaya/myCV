@@ -13,11 +13,3 @@
   } catch (e) { }
   document.documentElement.setAttribute('data-theme', theme);
 })();
-
-// Google Fonts'u non-blocking yüklüyoruz: şirket ağı bloklarsa fallback fontlarla render devam eder
-(function () {
-  var link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';
-  document.head.appendChild(link);
-})();

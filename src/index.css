@@ -1,3 +1,22 @@
+/* Font: Inter 4.0 metin kesimi (Medium 500, Bold 700), jaeyi.studio'daki gibi
+   kendi sunucumuzdan. Google Fonts'un Inter'i büyük boyutlarda kendiliğinden
+   "Display" kesimine geçtiği için harfler farklı görünüyordu. Lisans: SIL OFL 1.1. */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* ── v4 design tokens — KOYU TEMA (varsayılan) ── */
   --bg: #09090b;
@@ -347,6 +366,11 @@ section[id] {
   letter-spacing: -0.05em;
   max-width: 720px;
   color: var(--text);
+}
+
+/* Ana başlıkta bazı kısımlar gri, bazıları parlak ("müsaitim" satırı gibi) */
+.hero h1 .h1-dim {
+  color: var(--text-dim);
 }
 
 .slots {
