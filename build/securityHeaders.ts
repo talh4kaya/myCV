@@ -7,8 +7,7 @@
 
 const contentSecurityPolicy = [
     "default-src 'self'",
-    // wasm-unsafe-eval: Mangala yapay zekası WebAssembly ile çalışıyor (eval'e izin vermez)
-    "script-src 'self' 'wasm-unsafe-eval'",
+    "script-src 'self'",
     "style-src 'self' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data:",
