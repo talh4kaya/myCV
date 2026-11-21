@@ -36,7 +36,10 @@ const SiteFooter = () => {
 
     return (
         <footer className="site-footer">
-            <p>© 2026 Talha Kaya</p>
+            <div className="footer-sign">
+                <p>© 2026 Talha Kaya</p>
+                <p className="footer-quote">“Geçmiş veridir, gelecek ise fırsat ve ihtimal.”</p>
+            </div>
             <div className="footer-time-block">
                 <p className="footer-time">TRT <span>{clock}</span></p>
                 <p className="footer-sub">111 163</p>

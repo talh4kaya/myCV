@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useChatbot } from './useChatbot';
-import { MAX_MESSAGE_LENGTH } from '../services/chatGuard';
-import ThinkingSteps from './ThinkingSteps';
-import PredictiveInput from './PredictiveInput';
+import { MakapakaWindow } from './HeroCard';
 
+/* Tam ekran sohbet: ana sayfadaki makapaka penceresinin büyük hali.
+   Arkası bulanık; boşluğa tıklayınca, çarpıyla ya da Esc ile kapanır. */
 const MakapakaFullscreen = () => {
-    const { messages, isTyping, sendMessage, isFullscreenOpen, closeFullscreen } = useChatbot();
-    const [input, setInput] = useState('');
+    const { messages, isFullscreenOpen, closeFullscreen } = useChatbot();
     const [isClosing, setIsClosing] = useState(false);
-    const messagesRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleClose = useCallback(() => {
@@ -32,12 +30,6 @@ const MakapakaFullscreen = () => {
     }, [isFullscreenOpen]);
 
     useEffect(() => {
-        if (messagesRef.current) {
-            messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-        }
-    }, [messages, isTyping, isFullscreenOpen]);
-
-    useEffect(() => {
         const handler = (e: KeyboardEvent) => {
             if (e.key === 'Escape' && isFullscreenOpen) handleClose();
         };
@@ -45,53 +37,19 @@ const MakapakaFullscreen = () => {
         return () => window.removeEventListener('keydown', handler);
     }, [isFullscreenOpen, handleClose]);
 
-    const handleSend = () => {
-        const value = input.trim();
-        if (!value) return;
-        setInput('');
-        sendMessage(value);
-    };
-
     const className = `chat-fullscreen ${isFullscreenOpen ? 'active' : ''} ${isClosing ? 'closing' : ''}`.trim();
 
     return (
         <div className={className} onMouseDown={(e) => { if (e.target === e.currentTarget) handleClose(); }}>
-            <div className="fs-card">
-                <div className="fs-header">
-                    <div className="fs-title">makapaka</div>
-                    <button type="button" className="fs-close" onClick={handleClose} aria-label="Kapat (ESC)">
-                        ✕
-                    </button>
-                </div>
-
-                <div className="fs-messages" ref={messagesRef}>
-                    {messages.map((msg, idx) => (
-                        <div key={idx} className={`fs-msg${msg.role === 'user' ? ' user' : ''}`}>
-                            <div className="fs-msg-label">{msg.role === 'user' ? 'Sen' : 'Makapaka'}</div>
-                            {msg.thinking && <ThinkingSteps thinking={msg.thinking} />}
-                            {msg.content && <div className="fs-msg-text">{msg.content}</div>}
-                        </div>
-                    ))}
-                </div>
-
-                <div className="fs-input-box">
-                    <PredictiveInput
-                        className="fs-input"
+            <div className="mk-full">
+                <div className="hc2 hc2-full" role="dialog" aria-label="makapaka sohbeti">
+                    <MakapakaWindow
+                        full
+                        shown={messages}
+                        onClose={handleClose}
+                        onPlus={() => inputRef.current?.focus()}
                         inputRef={inputRef}
-                        maxLength={MAX_MESSAGE_LENGTH}
-                        value={input}
-                        onChange={setInput}
-                        onSubmit={handleSend}
                     />
-                    <button
-                        type="button"
-                        className="phone-send-btn"
-                        onClick={handleSend}
-                        disabled={isTyping || !input.trim()}
-                        aria-label="Gönder"
-                    >
-                        ↗
-                    </button>
                 </div>
             </div>
         </div>

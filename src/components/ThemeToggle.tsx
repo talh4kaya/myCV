@@ -12,13 +12,34 @@ const ThemeToggle = () => {
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
-        try {
-            // Kalıcı değil: site her yeni ziyarette koyu açılır (bkz. public/theme-init.js)
-            sessionStorage.setItem(STORAGE_KEY, theme);
-        } catch {
-            // depolama kapalı olabilir — tema yine de uygulanır
-        }
     }, [theme]);
+
+    // Ziyaretçi düğmeye basmadıysa cihazın teması değiştiğinde site de değişir
+    useEffect(() => {
+        const mq = window.matchMedia?.('(prefers-color-scheme: light)');
+        if (!mq) return;
+        const onChange = () => {
+            let chosen: string | null = null;
+            try {
+                chosen = sessionStorage.getItem(STORAGE_KEY);
+            } catch {
+                // depolama kapalı olabilir
+            }
+            if (!chosen) setTheme(mq.matches ? 'light' : 'dark');
+        };
+        mq.addEventListener('change', onChange);
+        return () => mq.removeEventListener('change', onChange);
+    }, []);
+
+    const choose = (t: Theme) => {
+        setTheme(t);
+        try {
+            // Kalıcı değil: yalnızca bu sekme açıkken hatırlanır (bkz. public/theme-init.js)
+            sessionStorage.setItem(STORAGE_KEY, t);
+        } catch {
+            // depolama kapalı olabilir, tema yine de uygulanır
+        }
+    };
 
     const next = theme === 'dark' ? 'light' : 'dark';
 
@@ -26,7 +47,7 @@ const ThemeToggle = () => {
         <button
             type="button"
             className="theme-toggle"
-            onClick={() => setTheme(next)}
+            onClick={() => choose(next)}
             aria-label={next === 'light' ? 'Açık temaya geç' : 'Koyu temaya geç'}
             title={next === 'light' ? 'Açık tema' : 'Koyu tema'}
         >

@@ -8,6 +8,7 @@ type Props = {
     onSubmit: () => void;
     maxLength: number;
     inputRef?: RefObject<HTMLInputElement | null>;
+    placeholder?: string;
 };
 
 /* Yazarken cümlenin devamını soluk gri olarak öneren giriş kutusu.
@@ -15,7 +16,7 @@ type Props = {
    edilir; Enter her zaman yalnızca yazılanı gönderir.
    Öneri, giriş kutusunun üstüne yerleştirilmiş görünmez bir kopya ile
    çizilir: kopyadaki yazı saydam, yalnızca önerinin kendisi görünür. */
-const PredictiveInput = ({ className, value, onChange, onSubmit, maxLength, inputRef }: Props) => {
+const PredictiveInput = ({ className, value, onChange, onSubmit, maxLength, inputRef, placeholder = 'Bir şey sor...' }: Props) => {
     const ownRef = useRef<HTMLInputElement>(null);
     const ref = inputRef ?? ownRef;
     const mirrorRef = useRef<HTMLDivElement>(null);
@@ -59,7 +60,8 @@ const PredictiveInput = ({ className, value, onChange, onSubmit, maxLength, inpu
                 ref={ref}
                 type="text"
                 className={className}
-                placeholder="Bir şey sor..."
+                placeholder={placeholder}
+                aria-label="makapakaya mesaj yaz"
                 autoComplete="off"
                 maxLength={maxLength}
                 value={value}

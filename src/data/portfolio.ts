@@ -43,7 +43,7 @@ export const portfolioData = {
       company: "İhlas Holding A.Ş.",
       role: "Yapay Zekâ ve Veri Mühendisliği — Uygulamalı Mühendislik Eğitimi (UMDE)",
       year: "2026 (devam ediyor)",
-      tech: ["Python", "FastAPI", "MCP", "LiteLLM", "Keycloak", "Trino", "Apache Ranger", "OpenFGA", "dbt", "Airflow", "Docker"],
+      tech: ["Python", "FastAPI", "MCP", "LiteLLM", "Keycloak", "Trino", "Apache Ranger", "dbt", "Airflow", "Docker"],
       description:
         "Holding genelinde kullanılan kurumsal yapay zekâ platformunu açık kaynak bileşenlerle şirket altyapısına kurdum; Active Directory'ye bağlı tek oturum açma ve departman/unvana göre otomatik yetkilendirme ekledim. Kişisel verileri dil modeline gitmeden maskeleyen KVKK uyumlu Türkçe anonimleştirme katmanını model geçidine bağladım. Çalışanın doğal dille izin isteyip yalnızca kendi onayıyla kayıt oluşturabildiği bir İK izin asistanı geliştirdim. Katmanlı bir veri gölü (Bronze/Silver/Gold), satır ve kolon düzeyinde yetki ile bunları tek ekrandan yöneten bir yönetim arayüzü kurdum; yeni bir iştirak kod yazmadan yaklaşık bir saatte asistana bağlanabiliyor."
     },
@@ -59,7 +59,7 @@ export const portfolioData = {
       company: "Arvasis Yazılım Danışmanlık",
       role: "Makine Öğrenmesi Stajyeri",
       year: "2025",
-      tech: ["Python", "YOLOv11", "OpenCV", "CNN", "NLP"],
+      tech: ["Python", "YOLOv11m", "OpenCV", "Sentetik veri"],
       description:
         "Görüntü işleme ve nesne tespiti alanlarında çalıştım. 65 farklı dil için kelime seviyesinde dil tespiti yapabilen bir model geliştirdim. Standart Tesseract'ın yetersiz kaldığı çok dilli belgelerde YOLOv11 ile metin tespiti uygulayarak doğruluk oranını %40'tan %85'in üzerine çıkardım. Gürültü temizleme, perspektif düzeltme ve data augmentation gibi görüntü ön işleme adımlarını uyguladım. Geliştirdiğim sistem, bir ilaç fabrikasında reçetelerin hangi dilde yazıldığını belirlemek için hâlâ aktif olarak kullanılıyor."
     }
@@ -72,16 +72,16 @@ export const portfolioData = {
       id: "data-lakehouse",
       org: "İhlas Holding · 2026",
       title: "Kurumsal Data Lakehouse",
-      punch: "Kaynaktan chatbota otomatik veri hazırlama · role göre görünürlük",
+      punch: "Otomatik veri süreçleri · role göre görünürlük",
       summary: "İştiraklerin veritabanı, Excel ve belgelerinden gelen veri otomatik olarak çekiliyor, temizleniyor ve SeaweedFS üzerindeki Iceberg tablolarında Bronze → Silver → Gold katmanlarına işleniyor. Herkes rolüne göre yalnızca görmesi gereken veriyi görüyor.",
-      tech: ["SeaweedFS", "Apache Iceberg", "Apache Polaris", "SeaTunnel (CDC)", "dbt", "Trino", "Airflow", "Apache Ranger", "OpenFGA", "Keycloak"]
+      tech: ["SeaweedFS", "Apache Iceberg", "Apache Polaris", "SeaTunnel (CDC)", "dbt", "Trino", "Airflow", "OpenMetadata", "Apache Ranger", "Keycloak"]
     },
     {
       id: "ai-agent-platform",
       org: "İhlas Holding · 2026",
       title: "Kurumsal AI Agent Platformu",
       punch: "Yetki bazlı sorgu · kişiselleştirilmiş agent",
-      summary: "Şirketteki herkes takip ettiği KPI'lara göre kendi agent'ını oluşturup kişiselleştirebiliyor. Agent'lar şirket verisini analiz ediyor, grafikleri sohbette çizip kişisel panolara (dashboard) kaydediyor; her işlemi kullanıcının kendi yetkisiyle yapıyor.",
+      summary: "Şirketteki herkes takip ettiği KPI'lara göre kendi agent'ını oluşturup kişiselleştirebiliyor. Agent'lar Data Lakehouse'tan gelen verilerle besleniyor; bu veriyi analiz edip grafikleri sohbette çiziyor, kişisel panolara (dashboard) kaydediyor. Her işlemi kullanıcının kendi yetkisiyle yapıyor.",
       tech: ["LibreChat", "LiteLLM", "IBM ContextForge", "MCP", "A2A", "LangGraph", "Superset", "Cube", "WeKnora (RAG)", "Langfuse"]
     },
     {
@@ -89,8 +89,8 @@ export const portfolioData = {
       org: "Arvasis · 2025",
       title: "Çok Dilli Belge OCR ve Dil Tespiti",
       punch: "65 dil · %85+ doğruluk",
-      summary: "Kelime düzeyinde dil tespiti yapan, YOLOv11 ile metin bölgelerini bulan hibrit bir OCR hattı geliştirdim. Bir ilaç fabrikası, reçetelerin hangi dilde yazıldığını belirlemek için hâlâ aktif olarak kullanıyor.",
-      tech: ["YOLOv11", "OpenCV", "Tesseract", "CNN", "NLP", "Python"]
+      summary: "65 dilin her birinden 500'e yakın kelimeyle sentetik veri üretip YOLOv11m nesne tespiti modelini eğittim; model kelimeleri bulup dillerini tespit ediyor. Tüm sayfayı OCR ile okumak çok uzun süreceği için dil tespitini nesne tespitiyle yaptım, böylece çok daha hızlı. Bir ilaç fabrikası, reçetelerin hangi dilde yazıldığını belirlemek için hâlâ aktif olarak kullanıyor.",
+      tech: ["YOLOv11m", "OpenCV", "Sentetik veri", "Python"]
     }
   ],
 
@@ -278,7 +278,7 @@ export const portfolioData = {
     {
       id: "multilingual-ocr",
       name: "Multilingual OCR Engine",
-      tech: ["YOLOv11", "OpenCV", "CNN", "NLP", "Python"],
+      tech: ["YOLOv11m", "OpenCV", "Sentetik veri", "Python"],
       desc:
         "Klasik OCR yöntemlerinin yetersiz kaldığı durumlarda devreye giren; 65 dildeki karmaşık belgeleri analiz edebilen hibrit bir görüntü işleme ve dil tespit sistemi. Arvasis staj projesi.",
       details: {
@@ -293,7 +293,7 @@ export const portfolioData = {
           {
             title: "Dil Tespiti (Language ID)",
             content:
-              "Görüntü tabanlı CNN ile NLP tekniklerini birleştirerek belgenin dilini tespit eden hibrit bir yapı kurdum."
+              "65 dilin her birinden 500'e yakın kelimeyle sentetik veri ürettim ve YOLOv11m nesne tespiti modelini bu veriyle eğittim. Model kelimeleri birer nesne gibi bulup dillerini tespit ediyor; tüm sayfayı OCR ile okumaktan çok daha hızlı."
           },
           {
             title: "Özelleştirilmiş OCR",

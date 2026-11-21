@@ -1,28 +1,150 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SiteHeader from '../components/sections/SiteHeader';
 import SiteFooter from '../components/sections/SiteFooter';
-import MakapakaCard from '../components/MakapakaCard';
 import ContactForm from '../components/sections/ContactForm';
+import HeroCard from '../components/HeroCard';
 import SocialDock from '../components/SocialDock';
 import FileBoxIllustration from '../components/FileBoxIllustration';
+import ProjectStory from '../components/ProjectStory';
+import HandsIllustration from '../components/HandsIllustration';
+import IdeaIllustration from '../components/IdeaIllustration';
 import CursorTrail from '../components/CursorTrail';
-import { portfolioData } from '../data/portfolio';
 import { useChatbot } from '../components/useChatbot';
 
-// Özet içindeki Bronze / Silver / Gold katman adlarını kendi renginde gösterir
-const TIER_PATTERN = /(Bronze|Silver|Gold)/;
-const withTierColors = (text: string) =>
-    text.split(TIER_PATTERN).map((part, i) =>
-        TIER_PATTERN.test(part)
-            ? <span key={i} className={`tier tier-${part.toLowerCase()}`}>{part}</span>
-            : part,
-    );
+// Projeler alanlarına göre kümelenmiş dört sütun (jaeyi'deki "Specialties" gibi).
+// İsimler ve linkler GitHub'daki repolara göre; repo'su olan etikete tıklayınca
+// GitHub'da açılır. Kurum içi projelerin (Lakehouse, Agent, OCR) repo'su yok.
+const GH = 'https://github.com/talh4kaya/';
+const SPECIALTIES: { name: string; desc: string; projects: { label: string; href?: string }[] }[] = [
+    {
+        name: 'Veri mühendisliği',
+        desc: 'Dağınık veriyi toplayan, temizleyen ve herkese yalnızca yetkisi olanı gösteren veri platformları.',
+        projects: [
+            { label: 'Kurumsal Data Lakehouse' },
+            { label: 'Uçtan Uca Big Data Pipeline', href: GH + 'big-data-pipeline' },
+            { label: 'Guardian-Flow: Uçtan Uca MLOps', href: GH + 'Data-Sci-end-to-end-MLops' },
+        ],
+    },
+    {
+        name: 'Yapay zekâ ajanları ve LLM',
+        desc: 'Veriyle çalışan, soru cevaplayan ve kullanıcının yetkisiyle iş yapan LLM tabanlı sistemler.',
+        projects: [
+            { label: 'Kurumsal AI Agent Platformu' },
+            { label: 'Kalem: Raporcu Agent', href: GH + 'kalem' },
+            { label: 'Repo-Chat: Lokal Kod Asistanı (RAG)', href: GH + 'repo-chat' },
+            { label: 'DSiyasi: Çok Ajanlı Siyasi Simülasyon', href: GH + 'dsiyasi' },
+            { label: 'AI Search: Prompta Göre Ürün Önerisi', href: GH + 'AI--Search' },
+            { label: 'makapaka: Bu Sitenin Asistanı', href: GH + 'myCV' },
+        ],
+    },
+    {
+        name: 'Makine öğrenmesi',
+        desc: 'Tablo verisinden tahmin üreten, deney yöneten ve kendi kendine oynayarak öğrenen modeller.',
+        projects: [
+            { label: 'Mangala AI: AlphaZero ve PPO', href: GH + 'reinforcement-Learning-Mangala' },
+            { label: 'Dönüşüm Optimizasyonu (Multi-Armed Bandit)', href: GH + 'conversion-optimizer' },
+            { label: 'Promo-Pulse: Kampanya Uplift Analizi', href: GH + 'Promo-Pulse-Uplift' },
+            { label: 'Home Credit Kredi Riski Analizi', href: GH + 'home-credit-analiz' },
+            { label: 'ML Destekli Görsel Bileşen Editörü', href: GH + 'react-visual-editor-ml-project' },
+            { label: 'TEKNOFEST Mutasyon Tahmini' },
+            { label: 'Data League Dezenformasyon Tespiti' },
+        ],
+    },
+    {
+        name: 'Görüntü işleme',
+        desc: 'Belgeleri ve görüntüleri okuyup dilini tespit eden, metne dönüştüren sistemler.',
+        projects: [
+            { label: 'Çok Dilli Belge OCR ve Dil Tespiti' },
+            { label: 'Gazete Arşivi VLM OCR' },
+        ],
+    },
+];
+
+// Deneyimlerim yol haritası: soldan sağa, eskiden bugüne
+const ROADMAP: { label: string; org: string; role: string; when: string; text: string; items: string[]; current?: boolean; next?: boolean }[] = [
+    {
+        label: 'Arvasis',
+        org: 'Arvasis Yazılım Danışmanlık',
+        role: 'Makine Öğrenmesi Stajyeri',
+        when: '2025',
+        text: "Görüntü işleme ve nesne tespiti alanlarında çalıştım. 65 farklı dil için kelime seviyesinde dil tespiti yapabilen bir model geliştirdim. Standart Tesseract'ın yetersiz kaldığı çok dilli belgelerde YOLOv11 ile metin tespiti uygulayarak doğruluk oranını %40'tan %85'in üzerine çıkardım; gürültü temizleme, perspektif düzeltme ve veri çoğaltma gibi ön işleme adımlarını uyguladım.",
+        items: ['65 dilde kelime düzeyinde dil tespiti', 'YOLOv11 ile metin tespiti', 'OCR doğruluğu %40 → %85+'],
+    },
+    {
+        label: 'Dijital Varlıklar',
+        org: 'Dijital Varlıklar A.Ş.',
+        role: 'Yazılım Mühendisi Stajyeri',
+        when: '2026',
+        text: "Türkiye Gazetesi'nin dijital arşivi için VLM tabanlı OCR modelleriyle çalıştım. Kurumsal bir yazılım için native RAG yapısı kurdum; PDF ve web verisini otomatik çıkarma, temizleme ve anlamlı parçalara bölme için bir veri işleme hattı geliştirdim. BGE-M3 ve Qdrant ile 400'den fazla doküman parçasını semantik aramaya hazır hale getirdim, iki katmanlı bir mükerrer tespit algoritmasıyla veri kalitesini artırdım.",
+        items: ['Gazete arşivi için VLM tabanlı OCR', 'Native RAG ve veri işleme hattı', 'BGE-M3 + Qdrant ile semantik arama'],
+    },
+    {
+        label: 'İhlas Holding',
+        org: 'İhlas Holding A.Ş.',
+        role: 'Yapay Zekâ ve Veri Mühendisliği',
+        when: '2026, devam ediyor',
+        text: "Holdingin uçtan uca veri, yetki ve yapay zekâ platformunu kuruyorum. İştiraklerin verisini katmanlı bir lakehouse'ta topladım; satır, kolon ve belge düzeyinde merkezî yetkilendirmeyi kurdum. Üstüne, kullanıcının kendi yetkisiyle çalışan; MCP araçları, RAG ve A2A agent'larından oluşan kurumsal yapay zekâ katmanını geliştirdim.",
+        items: ['Katmanlı lakehouse ve merkezî yetkilendirme', "MCP, RAG ve A2A agent'larıyla yapay zekâ katmanı", 'Kullanıcının yetkisiyle çalışan asistanlar'],
+        current: true,
+    },
+    {
+        label: 'Sıradaki',
+        org: 'Sıradaki durak',
+        role: 'Yeni projeler',
+        when: 'Yakında',
+        text: 'Yeni projelere ve iş birliklerine açığım. Veriyle ilgili çözmek istediğin bir problem varsa birlikte bakalım.',
+        items: ['Birlikte çalışmaya açığım'],
+        next: true,
+    },
+];
+
+// Ana başlık: iki satır
+// Ana başlık (Notion'daki gibi kısa ve iki satır); tanıtım cümlesi altındaki açıklamada
+const HEADLINE = [
+    'I turn raw data into',
+    'intelligent AI solutions.',
+];
+
+// Kartın altındaki logo duvarı: katıldığım yarışmalar (Notion'daki müşteri logoları gibi)
+const COMPETITIONS = [
+    { name: 'TEKNOFEST', rank: 'Finalist', medal: 'gold', logo: '/icons/comp/teknofest.png', desc: 'Sağlıkta Yapay Zeka kategorisinde DNA mutasyonlarını sınıflandıran modellerimizle 0.93 ile 0.97 arası AUPRC aldık ve finale kaldık.' },
+    { name: 'Data League', rank: 'Türkiye 2.', medal: 'silver', logo: '/icons/comp/dataleague.png', desc: 'Sosyal medyadaki koordineli dezenformasyonu etiketsiz veriyle tespit eden sistemimizle 5 milyondan fazla postu analiz ettik.' },
+    { name: 'GFAST', rank: 'İkincilik', medal: 'silver', logo: '/icons/comp/gfast.png', desc: 'Kestirimci bakım projemizle ikinci olduk ve projeyi gerçek sanayi ortaklarına sunduk.' },
+    { name: 'HSD Ideathon', rank: 'İkincilik', medal: 'silver', logo: '/icons/comp/hsd.png', desc: 'Afet koordinasyonu üzerine geliştirdiğimiz fikirle ikinci olduk.' },
+    { name: 'TÜBİTAK 2209-A', rank: 'Sunuldu', logo: '/icons/comp/tubitak-belge.svg', desc: 'Araştırma projemizi TÜBİTAK 2209-A kapsamında sunduk.' },
+    { name: 'Kaggle', rank: 'Aktif', logo: '/icons/comp/kaggle.png', desc: 'Veri bilimi yarışmalarına düzenli olarak katılıp her yarışmada yeni bir şey öğreniyorum.' },
+    { name: 'BTK Hackathon', rank: 'Katılım', logo: '/icons/comp/btk.svg', desc: "BTK Akademi 2026 Hackathon'unda AjanPazar ve FitAI projesiyle takım olarak yer aldık." },
+];
+
+const ROADMAP_STEP_MS = 5000;
 
 const Home = () => {
     const location = useLocation();
+    // Yol haritasında seçili durak; açılışta bugünkü iş
+    const [stepIndex, setStepIndex] = useState(0);
+    // Deneyimler kendi kendine sırayla ilerler (bölüm ekrandayken, 5 sn'de bir);
+    // ziyaretçi bir durağa tıkladığı anda otomatik ilerleme tamamen durur.
+    const [autoPlay, setAutoPlay] = useState(true);
+    const [roadmapVisible, setRoadmapVisible] = useState(false);
+    const roadmapRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const el = roadmapRef.current;
+        if (!el) return;
+        const io = new IntersectionObserver(([e]) => setRoadmapVisible(e.isIntersecting), { threshold: 0.35 });
+        io.observe(el);
+        return () => io.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (!autoPlay || !roadmapVisible) return;
+        const id = window.setTimeout(() => setStepIndex((i) => (i + 1) % ROADMAP.length), ROADMAP_STEP_MS);
+        return () => window.clearTimeout(id);
+    }, [autoPlay, roadmapVisible, stepIndex]);
     const { openFullscreen, sendMessage } = useChatbot();
     const heroRef = useRef<HTMLElement>(null);
+
 
     // Bu projelerin herkese açık bir sayfası yok; "Daha fazla bilgi al"
     // Makapaka'yı açıp projeyi detaylı anlatmasını ister.
@@ -53,166 +175,85 @@ const Home = () => {
             <main className="home-main">
                 <section className="hero" ref={heroRef}>
                     <div className="hero-title-wrap">
-                        {/* {' '} — mobilde <br> gizlendiğinde kelimeler birleşmesin */}
-                        <h1>
-                            I'm Talha Kaya, Data Scientist and{' '}<br />
-                            Machine Learning Engineer.{' '}
-                            <span className="h1-dim">I work{' '}<br />
-                            directly with data, from raw tables to vision,{' '}<br />
-                            LLMs, and RAG, and</span>{' '}
-                            automate all of it.
+                        {/* Notion'daki gibi: ortalı, büyük, iki satır; sayfa açılınca kelimeler
+                            alttan sırayla belirir. */}
+                        <h1 aria-label={HEADLINE.join(' ')}>
+                            {HEADLINE.map((line, li) => (
+                                <span key={li} aria-hidden="true">
+                                    {li > 0 && <br />}
+                                    {line.split(' ').map((word, wi, arr) => (
+                                        <span key={wi}>
+                                            <span className="h1-word" style={{ '--i': li * 8 + wi } as CSSProperties}>
+                                                <span>{word}</span>
+                                            </span>
+                                            {(wi < arr.length - 1 || li < HEADLINE.length - 1) && ' '}
+                                        </span>
+                                    ))}
+                                </span>
+                            ))}
                         </h1>
                     </div>
 
-                    <p className="slots">Yeni<strong> projeler</strong> için müsaitim.</p>
+                    <p className="hero-sub">
+                        Hi, I'm Talha Kaya. Data Scientist &amp; Machine Learning Engineer.
+                    </p>
 
+                    {/* Notion'daki gibi: ortada yan yana iki yuvarlak buton, solda dolu ana buton */}
                     <div className="hero-buttons">
                         <a
+                            href="#all-projects"
+                            className="btn btn-primary"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                document.getElementById('all-projects')?.scrollIntoView({ behavior: 'smooth' });
+                            }}
+                        >
+                            Projelerimi Keşfet
+                        </a>
+                        <a
                             href="#contact"
-                            className="btn btn-secondary btn-orbit"
+                            className="btn btn-soft"
                             onClick={(e) => {
                                 e.preventDefault();
                                 document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
                             }}
                         >
-                            <span className="orbit-ring" aria-hidden="true"><span className="orbit-spin" /></span>
-                            <span className="orbit-fill" aria-hidden="true" />
-                            <span className="orbit-label">İletişime Geç <span className="arrow">↗</span></span>
+                            İletişime Geç
                         </a>
-                        <a
-                            href="#projects"
-                            className="btn btn-primary"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-                            }}
-                        >
-                            Örnek Projelerim
-                        </a>
+                    </div>
+
+                    {/* Notion'daki ürün görselinin yerinde: Makapaka sohbet penceresi */}
+                    <div className="hero-card">
+                        <HeroCard />
                     </div>
                 </section>
 
-                <section className="project-grid" id="projects">
-                    <article className="project-card">
-                        <Link to="/yarismalarim" className="project-thumb project-thumb-comp">
-                            <img src="/icon-target.png" alt="" className="card-corner-icon" />
-                            <div className="comp-preview-list">
-                                <div className="comp-preview-row">
-                                    <img src="/icons/comp/teknofest.png" alt="" className="comp-preview-logo" />
-                                    <div className="comp-preview-text">
-                                        <span className="comp-preview-name">TEKNOFEST</span>
-                                        <span className="comp-preview-desc">Sağlıkta Yapay Zeka</span>
-                                    </div>
-                                    <span className="comp-preview-result">Finalist</span>
-                                </div>
-                                <div className="comp-preview-row">
-                                    <img src="/icons/comp/dataleague.png" alt="" className="comp-preview-logo" />
-                                    <div className="comp-preview-text">
-                                        <span className="comp-preview-name">Data League</span>
-                                        <span className="comp-preview-desc">Bot Ağı Tespiti</span>
-                                    </div>
-                                    <span className="comp-preview-result">Türkiye 2.</span>
-                                </div>
-                                <div className="comp-preview-row">
-                                    <img src="/icons/comp/gfast.png" alt="" className="comp-preview-logo is-mono" />
-                                    <div className="comp-preview-text">
-                                        <span className="comp-preview-name">GFAST</span>
-                                        <span className="comp-preview-desc">Kestirimci Bakım</span>
-                                    </div>
-                                    <span className="comp-preview-result">2.</span>
-                                </div>
-                                <div className="comp-preview-row">
-                                    <img src="/icons/comp/hsd.png" alt="" className="comp-preview-logo is-mono" />
-                                    <div className="comp-preview-text">
-                                        <span className="comp-preview-name">HSD Ideathon</span>
-                                        <span className="comp-preview-desc">Afet Koordinasyonu</span>
-                                    </div>
-                                    <span className="comp-preview-result">2.</span>
-                                </div>
-                                <div className="comp-preview-row">
-                                    <img src="/icons/comp/kaggle.png" alt="" className="comp-preview-logo" />
-                                    <div className="comp-preview-text">
-                                        <span className="comp-preview-name">Kaggle</span>
-                                        <span className="comp-preview-desc">Veri Bilimi Yarışmaları</span>
-                                    </div>
-                                    <span className="comp-preview-result"></span>
-                                </div>
-                            </div>
-                            <div className="comp-card-footer">
-                                <span className="project-caption">Katıldığım Yarışmalar</span>
-                                <span className="comp-card-arrow">→</span>
-                            </div>
-                        </Link>
-                    </article>
 
-                    <article className="project-card">
-                        <MakapakaCard />
-                    </article>
 
-                    <article className="project-card">
-                        <div className="project-thumb thumb-3 project-thumb-split">
-                            <img src="/icon-papers.png" alt="" className="card-corner-icon" />
-                            <div className="split-block">
-                                <div className="split-head">
-                                    <h4>Mangala AI</h4>
-                                    <p className="split-sub">Reinforcement Learning · AlphaZero &amp; Transformer</p>
-                                </div>
-                                <p className="split-desc">
-                                    ResNet yerine Transformer Encoder mimarisi ve Monte Carlo Tree Search (MCTS) kullanarak Mangala oyunu için sıfırdan bir AlphaZero ajanı geliştirdim; self-play yöntemiyle kendi kendine öğrenen model, geleneksel PPO ajanını 32-16 mağlup ederek dizilim bazlı strateji oyunlarında Attention mekanizmasının üstünlüğünü kanıtladı.
-                                </p>
-                                <div className="split-tags">
-                                    <span>PyTorch</span><span>AlphaZero</span><span>Transformer</span><span>Self Play</span>
-                                </div>
-                            </div>
-                            <div className="split-divider"></div>
-                            <div className="split-block">
-                                <div className="split-head">
-                                    <h4>TEKNOFEST</h4>
-                                    <p className="split-sub">Sağlıkta Yapay Zeka · Mutasyon Tahmini</p>
-                                </div>
-                                <p className="split-desc">
-                                    Genetik varyantların klinik yorumlanmasını otomatikleştiren bir karar destek aracı geliştirmek amacıyla; LightGBM, XGBoost ve CatBoost algoritmalarını Optuna optimizasyonu, SHAP açıklanabilirliği ve iki aşamalı karar eşiğiyle birleştiren bir ensemble modeli kurguladık. Dört farklı hastalık panelinde 0.93–0.97 AUPRC skoru elde eden proje, TEKNOFEST Sağlıkta Yapay Zeka yarışmasında finale kalmaya hak kazandı.
-                                </p>
-                                <div className="split-tags">
-                                    <span>LightGBM</span><span>XGBoost</span><span>SHAP</span><span>Optuna</span>
-                                </div>
-                            </div>
-                            <p className="split-title">Data Science Projelerim</p>
-                        </div>
-                    </article>
-
-                    <article className="project-card">
-                        <div className="project-thumb thumb-2 project-thumb-split">
-                            <img src="/icon-notebook.png" alt="" className="card-corner-icon" />
-                            <div className="split-block">
-                                <div className="split-head">
-                                    <h4>DPolitic</h4>
-                                    <p className="split-sub">LLM Tabanlı Çok Ajanlı Siyasi Simülasyon</p>
-                                </div>
-                                <p className="split-desc">
-                                    6 farklı siyasi profil ve 20 halk tipini simüle eden, tamamen yerel Llama ile çalışan çok ajanlı
-                                    siyasi simülasyon motoru. Tamamen otonom çalışan ve isteğe bağlı kullanıcı müdahalesi modu sunan bu yapıyla modellerin gerçek dünyayı ne kadar iyi simüle edebildiğini inceledim.
-                                </p>
-                                <div className="split-tags">
-                                    <span>Python</span><span>FastAPI</span><span>Llama</span><span>Multi Agent</span>
-                                </div>
-                            </div>
-                            <div className="split-divider"></div>
-                            <div className="split-block">
-                                <div className="split-head">
-                                    <h4>Multilingual OCR</h4>
-                                    <p className="split-sub">Görüntü İşleme &amp; Dil Tespiti</p>
-                                </div>
-                                <p className="split-desc">
-                                    65 dildeki karmaşık belgelerde mevcut OCR yöntemlerinin yetersiz kaldığını tespit ederek, dil tespiti ve YOLOv11 tabanlı hibrit bir OCR pipeline’ı geliştirdim. Bu yaklaşım ile OCR doğruluğunu %40’tan %85’in üzerine çıkardım.
-                                </p>
-                                <div className="split-tags">
-                                    <span>YOLOv11</span><span>OpenCV</span><span>CNN</span><span>NLP</span>
-                                </div>
-                            </div>
-                            <p className="split-title">LLM · VLM · RAG · OCR</p>
-                        </div>
-                    </article>
+                {/* Katıldığım yarışmalar: ince çerçeveli kutucuklardan ızgara. Üzerine gelince
+                    logo renklenir ve orada ne yaptığımız küçük bir kutuda yazar. */}
+                <section className="comp-grid-wrap" id="competitions" aria-label="Katıldığım yarışmalar">
+                    <p className="comp-grid-eyebrow">Katıldığım yarışmalar</p>
+                    <ul className="comp-grid">
+                        {COMPETITIONS.map((c) => (
+                            <li key={c.name}>
+                                <Link to="/yarismalarim" className="comp-tile" aria-describedby={`comp-tip-${c.name.replace(/\W+/g, '')}`}>
+                                    <span className="comp-tile-plus" aria-hidden="true">+</span>
+                                    <span className="comp-tile-icon" aria-hidden="true">
+                                        <img src={c.logo} alt="" className="comp-tile-logo" />
+                                    </span>
+                                    <span className="comp-tile-text">
+                                        <span className="comp-tile-name">{c.name}</span>
+                                        <small className={`comp-tile-rank${c.medal ? ` tier tier-${c.medal}` : ''}`}>{c.rank}</small>
+                                    </span>
+                                    <span className="comp-tip" role="tooltip" id={`comp-tip-${c.name.replace(/\W+/g, '')}`}>
+                                        <b className={c.medal ? `tier tier-${c.medal}` : undefined}>{c.rank}</b>
+                                        {c.desc}
+                                    </span>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
                 </section>
 
                 <section className="work" id="all-projects">
@@ -226,121 +267,109 @@ const Home = () => {
                         <FileBoxIllustration className="work-illustration" />
                     </div>
 
-                    <div className="work-grid">
-                        {portfolioData.featuredWork.map((work) => (
-                            <article className="work-card" key={work.id}>
-                                <div className="work-top">
-                                    <p className="work-org">{work.org}</p>
-                                    <h3 className="work-name">{work.title}</h3>
-                                    <p className="work-punch">{work.punch}</p>
-                                </div>
-                                <p className="work-summary">{withTierColors(work.summary)}</p>
-                                <div className="work-tech">
-                                    <p className="work-tech-label">Teknolojiler</p>
-                                    <div className="split-tags">
-                                        {work.tech.map((t) => <span key={t}>{t}</span>)}
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="work-more"
-                                        onClick={() => askAbout(work.title)}
-                                        aria-label={`${work.title} hakkında daha fazla bilgi al`}
-                                        title="Daha fazla bilgi al"
-                                    >
-                                        →
-                                    </button>
-                                </div>
-                            </article>
+                    <ProjectStory onAsk={askAbout} />
+                </section>
+
+                {/* Tüm projeler (jaeyi.studio'daki "Specialties" bölümü gibi): küçük üst başlık,
+                    büyük cümle, alanlarına göre kümelenmiş dört sütun */}
+                <section className="specialties" id="projects">
+                    <div className="specialties-top">
+                        <div>
+                            <p className="specialties-eyebrow">Tüm projelerim</p>
+                            <h2 className="specialties-statement">
+                                Veriyle başlayan her problemi, şirketlerin her gün kullandığı yapay zekâ çözümlerine
+                                dönüştürüyorum.
+                            </h2>
+                        </div>
+                        <IdeaIllustration className="specialties-illustration" />
+                    </div>
+                    <ul className="specialties-grid">
+                        {SPECIALTIES.map((sp) => (
+                            <li className="specialty" key={sp.name}>
+                                <h3 className="specialty-name">{sp.name}</h3>
+                                <p className="specialty-desc">{sp.desc}</p>
+                                <ul className="specialty-tags">
+                                    {sp.projects.map((p) => (
+                                        <li key={p.label}>
+                                            {p.href ? (
+                                                <a href={p.href} target="_blank" rel="noopener noreferrer">{p.label}</a>
+                                            ) : (
+                                                p.label
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
                         ))}
+                    </ul>
+                </section>
+
+                {/* Deneyimlerim: yol haritası gibi. Üstte başlık ve altında kısa özet (aynı
+                    hizada); altta soldan sağa tıklanabilir duraklar. */}
+                <section className="roadmap" id="experience" ref={roadmapRef}>
+                    <div className="roadmap-top">
+                        <div className="roadmap-head">
+                            <h2 className="roadmap-title">Deneyimlerim</h2>
+                            <p className="roadmap-summary">
+                                Görüntü işlemeyle başlayan yolum, belge işleme ve RAG üzerinden bugün bir holdingin uçtan uca
+                                veri ve yapay zekâ platformuna uzandı. Her durakta bir öncekinin üstüne koyarak ilerliyorum.
+                            </p>
+                        </div>
+                        <HandsIllustration className="roadmap-illustration" />
                     </div>
 
-                    <p className="work-older">
-                        <span>Önceki projeler:</span>
-                        {portfolioData.projects
-                            .filter((project) => project.github)
-                            .map((project) => (
-                                <a key={project.id} href={project.github} target="_blank" rel="noopener noreferrer">
-                                    {project.name.split('(')[0].trim()} ↗
+                    {/* duraklara tıklanır; seçilen durakta ne yaptığım altta anlatılır */}
+                    <ol className="roadmap-line" role="tablist" aria-label="Deneyimler">
+                        {ROADMAP.map((step, i) => (
+                            <li
+                                key={step.label}
+                                className={`roadmap-step${i === stepIndex ? ' is-selected' : ''}${step.next ? ' is-next' : ''}${i === stepIndex && autoPlay && roadmapVisible ? ' is-auto' : ''}`}
+                                style={{ '--step-ms': `${ROADMAP_STEP_MS}ms` } as CSSProperties}
+                            >
+                                <button
+                                    type="button"
+                                    role="tab"
+                                    id={`roadmap-tab-${i}`}
+                                    aria-selected={i === stepIndex}
+                                    aria-controls="roadmap-detail"
+                                    className="roadmap-hit"
+                                    onClick={() => {
+                                        setAutoPlay(false);
+                                        setStepIndex(i);
+                                    }}
+                                >
+                                    <span className="roadmap-pill">{step.label}</span>
+                                    <span className="roadmap-dot" aria-hidden="true" />
+                                    <span className="roadmap-role">{step.role}</span>
+                                    <span className="roadmap-when">{step.when}</span>
+                                </button>
+                            </li>
+                        ))}
+                    </ol>
+
+                    <div className="roadmap-detail" id="roadmap-detail" role="tabpanel" aria-labelledby={`roadmap-tab-${stepIndex}`} key={stepIndex}>
+                        <div className="roadmap-detail-meta">
+                            <p className="roadmap-detail-org">{ROADMAP[stepIndex].org}</p>
+                            <p className="roadmap-detail-role">{ROADMAP[stepIndex].role} · {ROADMAP[stepIndex].when}</p>
+                        </div>
+                        <div>
+                            <p className="roadmap-detail-text">{ROADMAP[stepIndex].text}</p>
+                            {ROADMAP[stepIndex].next ? (
+                                <a
+                                    href="#contact"
+                                    className="roadmap-detail-link"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                                    }}
+                                >
+                                    İletişime geç →
                                 </a>
-                            ))}
-                    </p>
-                </section>
-
-                <section className="clients" id="competitions">
-                    <p className="section-label">Katıldığım Yarışmalar</p>
-
-                    <div className="testimonial">
-                        <div className="exp-meta">
-                            <h3>TEKNOFEST Finalisti</h3>
-                            <p className="exp-sub">Yapay Zeka &amp; Makine Öğrenmesi</p>
-                        </div>
-                        <div className="testimonial-body">
-                            <p className="quote">
-                                "Türkiye'nin en büyük teknoloji festivali TEKNOFEST bünyesinde yapay zeka ve makine öğrenmesi
-                                alanında özgün modeller geliştirerek finalistlik derecesi elde ettim."
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="testimonial">
-                        <div className="exp-meta">
-                            <h3>Data League</h3>
-                            <p className="exp-sub">Veri Bilimi Yarışması</p>
-                        </div>
-                        <div className="testimonial-body">
-                            <p className="quote">
-                                "Sosyal medyadaki koordineli dezenformasyon kampanyalarını etiketli veri gereksinimi olmadan tespit etmek amacıyla; Isolation Forest algoritmasını TF-IDF tabanlı kampanya hafızası, 31 metin özelliği, çok dilli doğallık analizi ve AI içerik tespitiyle güçlendiren denetimsiz bir sistem geliştirdik. 5 milyondan fazla postu başarıyla analiz eden bu açıklanabilir mimari ile Üniversiteler Arası Data Yarışması'nda Türkiye 2.liği elde ettik."
-                            </p>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="clients" id="experience">
-                    <p className="section-label">Deneyimlerim</p>
-
-                    <div className="testimonial">
-                        <div className="exp-meta">
-                            <h3>Yapay Zekâ ve Veri Mühendisliği</h3>
-                            <p className="exp-sub">İhlas Holding A.Ş. (2026 – devam ediyor)</p>
-                        </div>
-                        <div className="testimonial-body">
-                            <p className="quote">
-                                "Uygulamalı Mühendislik Eğitimi kapsamında holdingin uçtan uca veri, yetki ve yapay zekâ
-                                platformunu kuruyorum. İştiraklerin verisini katmanlı bir lakehouse'ta topladım; satır, kolon ve
-                                belge düzeyinde merkezî yetkilendirmeyi kurdum. Üstüne, kullanıcının kendi yetkisiyle çalışan;
-                                MCP araçları, RAG ve A2A agent'larından oluşan kurumsal yapay zekâ katmanını geliştirdim."
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="testimonial">
-                        <div className="exp-meta">
-                            <h3>Yazılım Mühendisi Stajyeri</h3>
-                            <p className="exp-sub">Dijital Varlıklar A.Ş. (2026)</p>
-                        </div>
-                        <div className="testimonial-body">
-                            <p className="quote">
-                                "Türkiye Gazetesi'nin dijital arşivi için VLM tabanlı OCR modelleriyle çalıştım. Kurumsal bir
-                                yazılım için native RAG yapısı kurdum; PDF ve web verisini otomatik çıkarma, temizleme ve anlamlı
-                                parçalara bölme için bir veri işleme pipeline'ı geliştirdim. BGE-M3 ve Qdrant kullanarak 400'den
-                                fazla doküman parçasını semantik aramaya hazır hale getirdim; iki katmanlı bir mükerrer tespit
-                                algoritmasıyla veri kalitesini artırdım."
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="testimonial">
-                        <div className="exp-meta">
-                            <h3>Makine Öğrenmesi Stajyeri</h3>
-                            <p className="exp-sub">Arvasis Yazılım Danışmanlık (2025)</p>
-                        </div>
-                        <div className="testimonial-body">
-                            <p className="quote">
-                                "Görüntü işleme ve nesne tespiti alanlarında çalıştım. 65 farklı dil için kelime seviyesinde dil
-                                tespiti yapabilen bir model geliştirdim. Standart Tesseract'ın yetersiz kaldığı çok dilli belgelerde
-                                YOLOv11 ile metin tespiti uygulayarak doğruluk oranını %40'tan %85'in üzerine çıkardım. Gürültü
-                                temizleme, perspektif düzeltme ve data augmentation gibi görüntü ön işleme adımlarını uyguladım."
-                            </p>
+                            ) : (
+                                <ul className="roadmap-detail-items">
+                                    {ROADMAP[stepIndex].items.map((it) => <li key={it}>{it}</li>)}
+                                </ul>
+                            )}
                         </div>
                     </div>
                 </section>
@@ -348,11 +377,12 @@ const Home = () => {
                 <section className="about" id="contact">
                     <div className="about-text">
                         <p>
-                            Merhaba, ben <strong>Talha Kaya</strong>, Sakarya Üniversitesi Bilgisayar Mühendisliği öğrencisi ve
-                            veriden değer üreten bir <strong>Data Scientist &amp; Machine Learning Engineer</strong>'ım. Computer
-                            vision, RAG mimarileri ve LLM tabanlı sistemler kuruyorum. Arvasis, Dijital Varlıklar, Data League ve{' '}
-                            <strong>TEKNOFEST</strong> finalisti olarak yürüttüğüm çalışmalarımda karmaşık problemlere açıklanabilir
-                            ve sürdürülebilir çözümler üretmeye odaklanıyorum.
+                            Merhaba, ben <strong>Talha Kaya</strong>. Sakarya Üniversitesi'nde Bilgisayar Mühendisliği
+                            okuyorum ve <strong>Data Scientist &amp; Machine Learning Engineer</strong> olarak çalışıyorum. Ham
+                            veriyi toplayıp düzenliyor; ondan içgörü, tahmin ve gerçekten kullanılan yapay zekâ çözümleri
+                            üretiyorum. Veri hatlarından makine öğrenmesi modellerine, görüntü işlemeden LLM ve agent tabanlı
+                            sistemlere kadar işin her aşamasında çalışıyorum. Odağım hep aynı: karmaşık problemleri anlaşılır,
+                            güvenilir ve sürdürülebilir çözümlere dönüştürmek.
                         </p>
 
                         <SocialDock />

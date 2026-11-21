@@ -41,7 +41,7 @@ const QUESTIONS = [
     'Blogda hangi makaleleri inceledi?',
     'Generative Agents makalesi hakkında ne düşünüyor?',
     'Sen kimsin?',
-    'Makapaka nedir?',
+    'makapaka nedir?',
 ];
 
 const lower = (s: string) => s.toLocaleLowerCase('tr');

@@ -11,7 +11,7 @@ const STEP_REVEAL_MS = 450;
 const INITIAL_MESSAGE: ChatMessage = {
     role: 'bot',
     content:
-        "Merhaba! Ben Makapaka, Talha'nın yapay zeka asistanıyım. Projeler, stajlar veya yetkinlikler hakkında merak ettiklerini sorabilirsin.",
+        "Merhaba! Ben makapaka, Talha'nın yapay zeka asistanıyım. Projeler, stajlar veya yetkinlikler hakkında merak ettiklerini sorabilirsin.",
 };
 
 export const ChatbotProvider = ({ children }: { children: ReactNode }) => {
