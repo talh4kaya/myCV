@@ -202,7 +202,7 @@ export const portfolioData = {
           {
             title: "Sonuç",
             content:
-              "Sıfırdan eğittiğim AlphaZero modeli, milyonlarca adım eğitilmiş PPO ajanını 32-16 yendi. MCTS + Transformer kombinasyonunun bu oyun için doğru tercih olduğunu görmek güzeldi."
+              "Sıfırdan eğittiğim AlphaZero modeli, milyonlarca adım eğitilmiş PPO ajanını 32-16 yendi. Üçüncü sürümde arama ve eğitimdeki hataları düzelttim, 12 taşa kadar kusursuz oynayan bir oyun sonu tablosu ekledim. Yeni model eski sürümü 20 maçın 20'sinde, 10 hamle derinliğinde arama yapan klasik bir motoru maçların %85'inde yeniyor. Model sitede tarayıcıda çalışıyor, talhakaya.net/mangala adresinden ona karşı oynanabiliyor."
           }
         ]
       }

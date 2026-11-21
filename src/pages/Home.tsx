@@ -42,7 +42,7 @@ const SPECIALTIES: { name: string; desc: string; projects: { label: string; href
         name: 'Makine öğrenmesi',
         desc: 'Tablo verisinden tahmin üreten, deney yöneten ve kendi kendine oynayarak öğrenen modeller.',
         projects: [
-            { label: 'Mangala AI: AlphaZero ve PPO', href: GH + 'reinforcement-Learning-Mangala' },
+            { label: 'Mangala AI: AlphaZero (tarayıcıda oyna)', href: '/mangala' },
             { label: 'Dönüşüm Optimizasyonu (Multi-Armed Bandit)', href: GH + 'conversion-optimizer' },
             { label: 'Promo-Pulse: Kampanya Uplift Analizi', href: GH + 'Promo-Pulse-Uplift' },
             { label: 'Home Credit Kredi Riski Analizi', href: GH + 'home-credit-analiz' },
@@ -291,7 +291,9 @@ const Home = () => {
                                 <ul className="specialty-tags">
                                     {sp.projects.map((p) => (
                                         <li key={p.label}>
-                                            {p.href ? (
+                                            {p.href?.startsWith('/') ? (
+                                                <Link to={p.href}>{p.label}</Link>
+                                            ) : p.href ? (
                                                 <a href={p.href} target="_blank" rel="noopener noreferrer">{p.label}</a>
                                             ) : (
                                                 p.label

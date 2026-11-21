@@ -41,7 +41,8 @@ const G_COLORS: Record<keyof typeof G, string> = {
 };
 
 // logo: simple-icons çizimi; img: projenin kendi GitHub'ından alınan logo (public/icons/tech)
-type Node = { name: string; logo?: keyof typeof TECH_ICONS; img?: string; emoji?: string; icon?: keyof typeof G };
+// repo: teknolojinin GitHub deposu (sahip/ad); varsa kutucuk oraya bağlanır
+type Node = { name: string; repo?: string; logo?: keyof typeof TECH_ICONS; img?: string; emoji?: string; icon?: keyof typeof G };
 type Stage = { label: string; nodes: Node[]; layers?: boolean };
 type Project = {
     org: string;
@@ -60,11 +61,11 @@ const PROJECTS: Project[] = [
         ask: 'Kurumsal Data Lakehouse',
         stages: [
             { label: 'Kaynaklar', nodes: [{ name: 'Veritabanları', icon: 'db' }, { name: 'Excel', img: 'excel.svg' }, { name: 'PDF belgeler', img: 'pdf.svg' }] },
-            { label: 'Veri alımı', nodes: [{ name: 'SeaTunnel CDC', img: 'seatunnel' }, { name: 'Airflow', logo: 'apacheairflow' }] },
-            { label: 'Depolama', nodes: [{ name: 'SeaweedFS', img: 'seaweedfs' }, { name: 'Iceberg', img: 'iceberg' }, { name: 'dbt', logo: 'dbt' }], layers: true },
-            { label: 'Sorgu', nodes: [{ name: 'Trino', logo: 'trino' }, { name: 'Polaris katalog', img: 'polaris' }] },
+            { label: 'Veri alımı', nodes: [{ name: 'SeaTunnel CDC', repo: 'apache/seatunnel', img: 'seatunnel' }, { name: 'Airflow', repo: 'apache/airflow', logo: 'apacheairflow' }] },
+            { label: 'Depolama', nodes: [{ name: 'SeaweedFS', repo: 'seaweedfs/seaweedfs', img: 'seaweedfs' }, { name: 'Iceberg', repo: 'apache/iceberg', img: 'iceberg' }, { name: 'dbt', repo: 'dbt-labs/dbt', logo: 'dbt' }], layers: true },
+            { label: 'Sorgu', nodes: [{ name: 'Trino', repo: 'trinodb/trino', logo: 'trino' }, { name: 'Polaris katalog', repo: 'apache/polaris', img: 'polaris' }] },
         ],
-        band: { label: 'Yönetişim ve güvenlik', nodes: [{ name: 'OpenMetadata', img: 'openmetadata' }, { name: 'Keycloak', logo: 'keycloak' }, { name: 'Ranger', img: 'ranger' }] },
+        band: { label: 'Yönetişim ve güvenlik', nodes: [{ name: 'OpenMetadata', repo: 'open-metadata/OpenMetadata', img: 'openmetadata' }, { name: 'Keycloak', repo: 'keycloak/keycloak', logo: 'keycloak' }, { name: 'Ranger', repo: 'apache/ranger', img: 'ranger' }] },
     },
     {
         org: 'İhlas Holding, 2026',
@@ -72,13 +73,13 @@ const PROJECTS: Project[] = [
         text: "Lakehouse'taki veri buradaki agent'lara akıyor. Şirketteki herkes takip ettiği KPI'lara göre kendi agent'ını kurup kişiselleştirebiliyor. Agent'lar LangGraph ile çalışıyor, MCP üzerinden Trino, Cube ve belge arama araçlarına bağlanıyor; veriyi analiz edip grafiği sohbette çiziyor ve Superset panolarına kaydediyor. Her işlemi kullanıcının kendi yetkisiyle yapıyor, Langfuse ile her adım izleniyor.",
         ask: 'Kurumsal AI Agent Platformu',
         stages: [
-            { label: 'Sohbet', nodes: [{ name: 'LibreChat', img: 'librechat' }] },
-            { label: 'Model geçidi', nodes: [{ name: 'LiteLLM', emoji: '🚅' }] },
-            { label: 'Agent', nodes: [{ name: 'LangGraph', logo: 'langgraph' }, { name: 'A2A', icon: 'link' }] },
-            { label: 'Araçlar (MCP)', nodes: [{ name: 'ContextForge', img: 'contextforge' }, { name: 'Trino', logo: 'trino' }, { name: 'Cube', img: 'cube' }, { name: 'WeKnora RAG', icon: 'search' }] },
-            { label: 'Sonuç', nodes: [{ name: 'Superset', logo: 'apachesuperset' }] },
+            { label: 'Sohbet', nodes: [{ name: 'LibreChat', repo: 'LibreChat-AI/LibreChat', img: 'librechat' }] },
+            { label: 'Model geçidi', nodes: [{ name: 'LiteLLM', repo: 'BerriAI/litellm', emoji: '🚅' }] },
+            { label: 'Agent', nodes: [{ name: 'LangGraph', repo: 'langchain-ai/langgraph', logo: 'langgraph' }, { name: 'A2A', repo: 'a2aproject/A2A', icon: 'link' }] },
+            { label: 'Araçlar (MCP)', nodes: [{ name: 'ContextForge', repo: 'IBM/mcp-context-forge', img: 'contextforge' }, { name: 'Trino', repo: 'trinodb/trino', logo: 'trino' }, { name: 'Cube', repo: 'cube-js/cube', img: 'cube' }, { name: 'WeKnora RAG', repo: 'Tencent/WeKnora', icon: 'search' }] },
+            { label: 'Sonuç', nodes: [{ name: 'Superset', repo: 'apache/superset', logo: 'apachesuperset' }] },
         ],
-        band: { label: 'İzleme', nodes: [{ name: 'Langfuse', img: 'langfuse' }] },
+        band: { label: 'İzleme', nodes: [{ name: 'Langfuse', repo: 'langfuse/langfuse', img: 'langfuse' }] },
     },
     {
         org: 'Arvasis, 2025',
@@ -87,11 +88,11 @@ const PROJECTS: Project[] = [
         ask: 'Çok Dilli Belge OCR ve Dil Tespiti',
         stages: [
             { label: 'Girdi', nodes: [{ name: 'Reçete görseli', icon: 'doc' }] },
-            { label: 'Ön işleme', nodes: [{ name: 'OpenCV', logo: 'opencv' }] },
-            { label: 'Dil tespiti', nodes: [{ name: 'YOLOv11m nesne tespiti', logo: 'yolo' }] },
+            { label: 'Ön işleme', nodes: [{ name: 'OpenCV', repo: 'opencv/opencv', logo: 'opencv' }] },
+            { label: 'Dil tespiti', nodes: [{ name: 'YOLOv11m nesne tespiti', repo: 'ultralytics/ultralytics', logo: 'yolo' }] },
             { label: 'Çıktı', nodes: [{ name: 'Kelimeler ve dilleri', icon: 'globe' }] },
         ],
-        band: { label: 'Eğitim', nodes: [{ name: 'Sentetik veri: 65 dil, dil başına yaklaşık 500 kelime', icon: 'text' }, { name: 'Python', logo: 'python' }] },
+        band: { label: 'Eğitim', nodes: [{ name: 'Sentetik veri: 65 dil, dil başına yaklaşık 500 kelime', icon: 'text' }, { name: 'Python', repo: 'python/cpython', logo: 'python' }] },
     },
 ];
 
@@ -117,12 +118,25 @@ const nodeColor = (n: Node): CSSProperties => {
     return { '--c': c, '--cd': c } as CSSProperties;
 };
 
-const Chip = ({ n }: { n: Node }) => (
-    <span className="ps-node" style={nodeColor(n)}>
-        <NodeIcon n={n} />
-        {n.name}
-    </span>
-);
+const Chip = ({ n }: { n: Node }) =>
+    n.repo ? (
+        <a
+            className="ps-node is-link"
+            style={nodeColor(n)}
+            href={`https://github.com/${n.repo}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={`${n.name} GitHub deposu`}
+        >
+            <NodeIcon n={n} />
+            {n.name}
+        </a>
+    ) : (
+        <span className="ps-node" style={nodeColor(n)}>
+            <NodeIcon n={n} />
+            {n.name}
+        </span>
+    );
 
 // yol çizgisindeki noktaların sırayla yandığı renkler
 const DOT_COLORS = ['#7c5cff', '#1f63f0', '#12a594', '#f5b100', '#e5734a', '#ec4899'];

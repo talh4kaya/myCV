@@ -97,6 +97,15 @@ const COMPETITIONS: PageMeta = {
     jsonLd: [breadcrumb([{ name: 'Ana Sayfa', path: '/' }, { name: 'Yarışmalarım', path: '/yarismalarim' }])],
 };
 
+const MANGALA: PageMeta = {
+    path: '/mangala',
+    title: 'Mangala: Yapay Zekaya Karşı Oyna | Talha Kaya',
+    description:
+        'AlphaZero yöntemiyle kendi kendine oynayarak eğittiğim Mangala yapay zekasına karşı tarayıcında oyna. Transformer ağı, Monte Carlo ağaç araması ve oyun sonu tablosu.',
+    type: 'website',
+    jsonLd: [breadcrumb([{ name: 'Ana Sayfa', path: '/' }, { name: 'Mangala', path: '/mangala' }])],
+};
+
 const BLOG: PageMeta = {
     path: '/blog',
     title: 'Blog: Yapay Zeka Makale İncelemeleri | Talha Kaya',
@@ -166,6 +175,7 @@ export const NOT_FOUND: PageMeta = {
 export const getAllPages = (): PageMeta[] => [
     HOME,
     COMPETITIONS,
+    MANGALA,
     BLOG,
     ...readings.map(blogPostMeta),
 ];
